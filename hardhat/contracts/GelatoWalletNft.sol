@@ -18,7 +18,7 @@ contract GelatoWalletNft is ERC721 {
        
     }
 
-    function mint( )external returns (uint256) {
+    function mint( ) external returns (uint256) {
         tokenId.increment();
         senderWallet = msg.sender;
         uint256 newItemId = tokenId.current();

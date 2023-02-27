@@ -20,6 +20,9 @@ import {
 import { SafeEventEmitterProvider, UserInfo } from "@web3auth/base";
 import { getChainConfig } from "./utils";
 import { COUNTER_CONTRACT_ABI } from "./constants";
+import { Tasks } from "./components/Tasks";
+import { SmartWallet } from "./components/SmartWallet";
+import { Eoa } from "./components/Eoa";
 
 function App() {
   const tasks = useAppSelector((state) => state.tasks.tasks);
@@ -91,13 +94,14 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
  } 
 
 
-  const toggleActive = async () => {
+  const toggleConnect= async () => {
    
-  //   let tx = await stringDisplay?.toggleChange();
-  //   await tx?.wait();
-  //   let new_active = await stringDisplay?.active();
+    if (connected == true){
+      connectButton()
+    } else {
+      logout()
+    }
 
-  //  setActive(new_active!);
   };
 
   const connectButton= async () => {
@@ -126,6 +130,12 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
     // console.log(string)
     // setDisplay(string);;
   };
+
+  useEffect(() => {
+    setConnected(false)
+    console.log(connected)
+
+   })
 
 
   useEffect(() => {
@@ -173,7 +183,7 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
         setIsLoading(false);
       }
     };
-    init();
+   // init();
   }, []);
 
   useEffect(() => {
@@ -191,6 +201,7 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
         balance: (await signer.getBalance()).toString(),
         chainId: await signer.getChainId(),
       });
+      console.log(wallet)
       const user = await gelatoLogin.getUserInfo();
       setUser(user);
       console.log(user);
@@ -217,7 +228,7 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
       setIsLoading(false);
       return () => clearInterval(interval);
     };
-    init();
+    //init();
   }, [web3AuthProvider]);
 
   useTitle("create-gelato-web3functions-dapp");
@@ -231,9 +242,14 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
         connectButton={connectButton}
       />
       <PlaceHolderApp
+        user={user}
+        wallet={wallet}
         connected={connected}
-        toggleActive={toggleActive}
+        chainId={chainId}
+        toggleConnect={toggleConnect}
       />
+      <Tasks/>
+ 
     </div>
   );
 }

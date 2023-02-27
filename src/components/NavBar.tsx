@@ -168,25 +168,6 @@ const NavBar = (props: NavBarProps) => {
               </li>
             </ul>
           </li>
-          <li>
-            {!props.connected ? (
-              <button
-                style={{ color: "white" }}
-                className="btn bg-connect-button"
-                onClick={props.connectButton}
-              >
-                {" "}
-                Connect Wallet{" "}
-              </button>
-            ) : (
-              <button className="btn bg-connect-button">
-                {" "}
-                <img src={metamask} width={25} height={25} />{" "}
-                {props.address.slice(0, 5) + "..." + props.address.slice(-3)}{" "}
-              </button>
-            )}
-            {/* <ConnectWallet accentColor="#6519e6" colorMode="dark" /> */}
-          </li>
         </ul>
       </div>
     </div>

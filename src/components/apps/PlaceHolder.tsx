@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { StringDisplay } from "../../blockchain/StringDisplay";
 
 import { } from '../../App'
 interface PlaceHolderProps {
-  active: boolean;
-  display: string;
+  connected: boolean;
   toggleActive: ()=> {}
 }
 
@@ -18,24 +16,24 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
           <div style={{alignItems:'center'}} className="card-body justify-content-center align-items-center">
             <div className="flex flex-col justify-content-center align-items-center">
               <h2 className="card-title mb-2">
-                Random String generation web3 function
+                Gelato Wallet Gasless Minting
               </h2>
               <div className="mb-4  self-center">
-                Updates
+               Token Nr
              
-                <p style={{height:'30px', background: props.active ? 'green' :'red', width:'30px', borderRadius:'20px', margin:'auto'}}></p>
+                <p style={{height:'30px', background: props.connected ? 'green' :'red', width:'30px', borderRadius:'20px', margin:'auto'}}></p>
             
                 <button
                   className="btn btn-primary mt-4"
                   onClick={() => props.toggleActive()}
                 >
                   {" "}
-                  {props.active ? "Deactivate" : "Activate"}
+                  {props.connected ? "Deactivate" : "Activate"}
                 </button>
               </div>
             </div>
             <div className="flex flex-col">
-              <h2 className="card-title">{props.display}</h2>
+              <h2 className="card-title">{props.connected}</h2>
             </div>
           </div>
         </div>

@@ -33,12 +33,12 @@ export interface GelatoWalletNftInterface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "lastMinter()": FunctionFragment;
     "mint()": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
-    "senderWallet()": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -53,12 +53,12 @@ export interface GelatoWalletNftInterface extends utils.Interface {
       | "balanceOf"
       | "getApproved"
       | "isApprovedForAll"
+      | "lastMinter"
       | "mint"
       | "name"
       | "ownerOf"
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
-      | "senderWallet"
       | "setApprovalForAll"
       | "supportsInterface"
       | "symbol"
@@ -83,6 +83,10 @@ export interface GelatoWalletNftInterface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "lastMinter",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
@@ -105,10 +109,6 @@ export interface GelatoWalletNftInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BytesLike>
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "senderWallet",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
@@ -143,6 +143,7 @@ export interface GelatoWalletNftInterface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "lastMinter", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -152,10 +153,6 @@ export interface GelatoWalletNftInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom(address,address,uint256,bytes)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "senderWallet",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -270,6 +267,8 @@ export interface GelatoWalletNft extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    lastMinter(overrides?: CallOverrides): Promise<[string]>;
+
     mint(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -295,8 +294,6 @@ export interface GelatoWalletNft extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    senderWallet(overrides?: CallOverrides): Promise<[string]>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
@@ -350,6 +347,8 @@ export interface GelatoWalletNft extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  lastMinter(overrides?: CallOverrides): Promise<string>;
+
   mint(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -375,8 +374,6 @@ export interface GelatoWalletNft extends BaseContract {
     data: PromiseOrValue<BytesLike>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
-
-  senderWallet(overrides?: CallOverrides): Promise<string>;
 
   setApprovalForAll(
     operator: PromiseOrValue<string>,
@@ -428,6 +425,8 @@ export interface GelatoWalletNft extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    lastMinter(overrides?: CallOverrides): Promise<string>;
+
     mint(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<string>;
@@ -451,8 +450,6 @@ export interface GelatoWalletNft extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    senderWallet(overrides?: CallOverrides): Promise<string>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
@@ -540,6 +537,8 @@ export interface GelatoWalletNft extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    lastMinter(overrides?: CallOverrides): Promise<BigNumber>;
+
     mint(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -565,8 +564,6 @@ export interface GelatoWalletNft extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    senderWallet(overrides?: CallOverrides): Promise<BigNumber>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,
@@ -619,6 +616,8 @@ export interface GelatoWalletNft extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    lastMinter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     mint(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -644,8 +643,6 @@ export interface GelatoWalletNft extends BaseContract {
       data: PromiseOrValue<BytesLike>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
-
-    senderWallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     setApprovalForAll(
       operator: PromiseOrValue<string>,

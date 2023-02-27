@@ -19,13 +19,11 @@ import {
 } from "@gelatonetwork/gasless-onboarding";
 import { SafeEventEmitterProvider, UserInfo } from "@web3auth/base";
 import { getChainConfig } from "./utils";
-import { COUNTER_CONTRACT_ABI } from "./constants";
 import { Tasks } from "./components/Tasks";
-import { SmartWallet } from "./components/SmartWallet";
-import { Eoa } from "./components/Eoa";
+
 
 function App() {
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const tasks = useAppSelector((state) => state.tasks.tasks)
   const error = useAppSelector((state) => state.error.message);
   const dispatch = useAppDispatch();
   const [gelatoLogin, setGelatoLogin] = useState<
@@ -37,23 +35,20 @@ function App() {
     target: string;
   }>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [counter, setCounter] = useState<string>("0");
+  const [tokenId, setTokenId] = useState<string|null>();
+  const [lastminter, setLastMinter] = useState<string|null>();
   const [web3AuthProvider, setWeb3AuthProvider] =
     useState<SafeEventEmitterProvider | null>(null);
   const [smartWallet, setSmartWallet] = useState<GaslessWalletInterface | null>(
     null
   );
   const [connected, setConnected] = useState(false);
-  const [address, setAddress] = useState("");
-  const [active, setActive] = useState(false);
+
   const [chainId, setChainId] = useState(0);
   const [signer, setSigner] = useState<any>(null);
-  const [display, setDisplay] = useState<string>("");
-  const [stringDisplay, setStringDisplay] = useState<GelatoWalletNft | null>(
-    null
-  );
-  const [counterContract, setCounterContract] =
-    useState<ethers.Contract | null>(null);
+
+  const [contract, setContract] =
+    useState<GelatoWalletNft| null>(null);
   const [user, setUser] = useState<Partial<UserInfo> | null>(null);
   const [wallet, setWallet] = useState<{
     address: string;
@@ -65,33 +60,8 @@ function App() {
 let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; // 
 
 
- const initializeContract = async (signer:any) =>{
-  let contract = new ethers.Contract(
-    GelatoWalletNftMetadata.address,
-    GelatoWalletNftMetadata.abi,
-    signer
-  ) as GelatoWalletNft;
-  // let string = await contract.display();
-  // console.log(string)
-  setStringDisplay(contract);
-  // setDisplay(string);
-  // setActive(await contract.active());
-  // console.log(string);
-  setChainId(chainId);
-  console.log(chainId);
-  setConnected(true);
-  console.log(connected);
-  setAddress(await signer.getAddress());
-  console.log(address);
+console.log(115)
 
-  contract.on("NewString",async ()=> {
-    console.log('chainging')
-    //let string = await contract.display();
-    // console.log(string)
-    // setDisplay(string);;
-  })
-
- } 
 
 
   const toggleConnect= async () => {
@@ -104,12 +74,20 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
 
   };
 
+  const mint = async () => {
+    let tx = await contract!.mint()
+    await tx.wait();
+
+  }
+
   const connectButton= async () => {
-    if (!gelatoLogin) {
-      return;
-    }
-    const web3authProvider = await gelatoLogin.login();
-    setWeb3AuthProvider(web3authProvider);
+    dispatch(addTask('taskId'));
+
+    // if (!gelatoLogin) {
+    //   return;
+    // }
+    // const web3authProvider = await gelatoLogin.login();
+    // setWeb3AuthProvider(web3authProvider);
   };
 
   const logout = async () => {
@@ -125,14 +103,18 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
   };
 
 
-  const getString = async () => {
-   // let string = await stringDisplay!.display();
-    // console.log(string)
-    // setDisplay(string);;
+  const fetchStatus = async () => {
+    if (!contract || !smartWallet) {
+      return;
+    }
+    const tokenId = (await contract.tokenId).toString();
+    const lastMinter = (await contract.senderWallet)
+    setTokenId(tokenId);
+    setIsDeployed(await smartWallet!.isDeployed());
   };
 
   useEffect(() => {
-    setConnected(false)
+    setConnected(true)
     console.log(connected)
 
    })
@@ -208,21 +190,14 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
       const gelatoSmartWallet = gelatoLogin.getGaslessWallet();
       setSmartWallet(gelatoSmartWallet);
       setIsDeployed(await gelatoSmartWallet.isDeployed());
-      const counterGaslessNFT = new ethers.Contract(
+      const contract = new ethers.Contract(
         GelatoWalletNftMetadata.address,
         GelatoWalletNftMetadata.abi,
-        new ethers.providers.Web3Provider(web3AuthProvider!).getSigner()
-      );
-      setCounterContract(counterContract);
+        new ethers.providers.Web3Provider(web3AuthProvider!).getSigner() 
+      ) as GelatoWalletNft;
+      setContract(contract);
       setConnected(true)
-      const fetchStatus = async () => {
-        if (!counterContract || !gelatoSmartWallet) {
-          return;
-        }
-        const counter = (await counterContract.counter()).toString();
-        setCounter(counter);
-        setIsDeployed(await gelatoSmartWallet.isDeployed());
-      };
+  
       await fetchStatus();
       const interval = setInterval(fetchStatus, 5000);
       setIsLoading(false);
@@ -231,24 +206,24 @@ let network: 'mumbai' | 'localhost' = "localhost"; // 'mumbai';// "localhost"; /
     //init();
   }, [web3AuthProvider]);
 
-  useTitle("create-gelato-web3functions-dapp");
+  useTitle("create-gelato-gasless-walelt-dapp");
 
 
   return (
     <div className="App bg-slate-600 h-screen flex flex-col content-center">
       <NavBar
-        connected={connected}
-        address={address}
-        connectButton={connectButton}
       />
       <PlaceHolderApp
+        lastMinter={lastminter!}
+        tokenId={tokenId!}
         user={user}
         wallet={wallet}
         connected={connected}
         chainId={chainId}
         toggleConnect={toggleConnect}
+        mint={mint}
       />
-      <Tasks/>
+     
  
     </div>
   );

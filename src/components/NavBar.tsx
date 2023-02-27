@@ -4,9 +4,6 @@ import gelato from "../assets/images/gelato-1.png";
 import metamask from "../assets/images/metamask.png";
 
 interface NavBarProps {
-  connected: boolean;
-  address: string;
-  connectButton: (params: any) => any;
 }
 
 const NavBar = (props: NavBarProps) => {

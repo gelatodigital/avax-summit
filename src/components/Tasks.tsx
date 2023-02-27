@@ -106,7 +106,7 @@ const Task: React.FC<{ task: ITask }> = (props) => {
       ? getBlockExplorerUrl(parseInt(details.chainId), details.txHash)
       : null;
   return (
-    <div className="bg-[#f5c3a6] bg-opacity-10 p-5 shadow-md flex flex-col rounded-lg">
+    <div className="bg-[#f5c3a6] bg-opacity-10 p-5 shadow-md flex flex-col rounded-lg align-start">
       <div className="flex-col flex items-start gap-1">
         <p className={`${statusColor} font-bold`}>{status}</p>
         <div className="flex-1 flex-row flex gap-1 items-center">

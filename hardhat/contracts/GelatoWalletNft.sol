@@ -10,7 +10,7 @@ contract GelatoWalletNft is ERC721 {
      using Counters for Counters.Counter;
     Counters.Counter public tokenId;
 
-    address public senderWallet;
+    address public lastMinter;
 
     constructor()
         ERC721("GGW", "Gelato Gasless Wallet")
@@ -20,7 +20,7 @@ contract GelatoWalletNft is ERC721 {
 
     function mint( ) external returns (uint256) {
         tokenId.increment();
-        senderWallet = msg.sender;
+        lastMinter = msg.sender;
         uint256 newItemId = tokenId.current();
         _mint(msg.sender, newItemId);
     

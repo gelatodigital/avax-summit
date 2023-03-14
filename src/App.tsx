@@ -22,15 +22,15 @@ import { Tasks } from "./components/Tasks";
 import { NFT_ABI } from "./constants";
 import ConfettiExplosion from "confetti-explosion-react";
 
-const nftAddres="0x105246C20C61002C7f26eABFEbE90641D234F995"
+const nftAddres = "0x105246C20C61002C7f26eABFEbE90641D234F995";
 
 const largeProps = {
   force: 0.6,
   duration: 5000,
   particleCount: 200,
   height: 1600,
-  width: 1600
-}
+  width: 1600,
+};
 
 function App() {
   const tasks = useAppSelector((state) => state.tasks.tasks);
@@ -71,8 +71,6 @@ function App() {
   const [isExploding, setExploding] = useState(false);
   let network: "localhost" | "localhost" = "localhost"; // 'mumbai';// "localhost"; //
 
-  console.log(115);
-
   const toggleConnect = async () => {
     if (connected == true) {
       logout();
@@ -83,22 +81,19 @@ function App() {
 
   const mint = async () => {
     setIsLoading(true);
-   // setExploding(false)
+    // setExploding(false)
     // setExploding(true)
 
     // setTimeout(()=> {
     //   setExploding(false)
     // },5000)
-    const { data } =  await contract!.populateTransaction.mint();
-    let tx = await smartWallet?.sponsorTransaction(
-      nftAddres,
-      data!
-    )
+    const { data } = await contract!.populateTransaction.mint();
+    let tx = await smartWallet?.sponsorTransaction(nftAddres, data!);
 
     // console.log(data)
-      console.log(tx)
+    console.log(tx);
 
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   const connectButton = async () => {
@@ -121,14 +116,33 @@ function App() {
     setUser(null);
     setSmartWallet(null);
     setContract(null);
+    setAlreadyOwnerId("0");
+    setTokenId("0");
+    setImageName("");
+    setImageUrl("");
+    setConnected(false);
+  };
+
+  const refresh = async (_tokenId: number) => {
+    let ipfs = await contract!.tokenURI(_tokenId);
+    console.log(ipfs);
+
+    let url = ipfs.replace("ipfs://", "");
+
+    let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
+
+    const persons = res.data;
+
+    console.log(persons.name);
+    console.log(persons.image);
+    setImageName(persons.name);
+    setImageUrl(persons.image.replace("ipfs://", ""));
   };
 
   const fetchStatus = async () => {
- 
     if (!contract || !smartWallet) {
       return;
     }
-
   };
 
   useEffect(() => {
@@ -214,58 +228,78 @@ function App() {
         new ethers.providers.Web3Provider(web3AuthProvider!).getSigner()
       );
 
-      contract.on('MintEvent', async (_tokenId:any) => {
-        console.log(_tokenId)
-       console.log('mintied')
+      contract.on("MintEvent", async (_tokenId: any) => {
+        console.log(_tokenId.toString());
+        const alreadyOwnerId = (
+          await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
+        ).toString();
+        console.log(alreadyOwnerId);
+        if (alreadyOwnerId == _tokenId.toString()) {
+          setAlreadyOwnerId(alreadyOwnerId)
+          let ipfs = await contract!.tokenURI(+alreadyOwnerId);
+          console.log(ipfs);
+
+          let url = ipfs.replace("ipfs://", "");
+
+          let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
+
+          const persons = res.data;
+          setImageName(persons.name);
+          setImageUrl(persons.image.replace("ipfs://", ""));
+        }
       });
 
-      contract.on('MetadataUpdate', async (_tokenId:any) => {
-       
-       console.log(_tokenId)
+      contract.on("MetadataUpdate", async (_tokenId: any) => {
+        const alreadyOwnerId = (
+          await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
+        ).toString();
+        console.log(_tokenId);
+        console.log(alreadyOwnerId)
+        if (alreadyOwnerId == _tokenId.toString()) {
+          setAlreadyOwnerId(alreadyOwnerId)
+          let ipfs = await contract!.tokenURI(+alreadyOwnerId);
+          console.log(ipfs);
+
+          let url = ipfs.replace("ipfs://", "");
+
+          let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
+
+          const persons = res.data;
+          setImageName(persons.name);
+          setImageUrl(persons.image.replace("ipfs://", ""));
+        }
       });
 
       setContract(contract);
       setConnected(true);
 
+      const currentTokenId = (await contract.tokenIds()).toString();
+      console.log(currentTokenId);
 
+      const alreadyOwnerId = (
+        await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
+      ).toString();
+      console.log(alreadyOwnerId);
 
-      
-    const currentTokenId = (await contract.tokenIds()).toString();
-    console.log(currentTokenId);
+      setAlreadyOwnerId(alreadyOwnerId);
+      setTokenId(currentTokenId);
 
-    const alreadyOwnerId = (
-      await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
-    ).toString();
-    console.log(alreadyOwnerId);
+      if (alreadyOwnerId != "0") {
+        console.log(alreadyOwnerId != "0");
+        let ipfs = await contract.tokenURI(+alreadyOwnerId);
+        console.log(ipfs);
 
-  
+        let url = ipfs.replace("ipfs://", "");
 
-    setAlreadyOwnerId(alreadyOwnerId);
-    setTokenId(currentTokenId);
+        let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
 
-    if (alreadyOwnerId != "0") {
-      console.log(alreadyOwnerId != "0")
-      let ipfs = await contract.tokenURI(1);
-      console.log(ipfs)
-  
-      let url = ipfs.replace('ipfs://',"")
-  
-      let res = await axios.get(
-        `https://nftstorage.link/ipfs/${url}`
-      );
-  
-      const persons = res.data;
+        const persons = res.data;
 
-      console.log(persons.name)
-      console.log(persons.image);
-      setImageName(persons.name)
-      setImageUrl(persons.image.replace('ipfs://',""))
-    }
-   
-
-
- 
-
+        console.log(persons.name);
+        console.log(persons.image);
+        setImageName(persons.name);
+        setImageUrl(persons.image.replace("ipfs://", ""));
+      }
 
       const interval = setInterval(fetchStatus, 5000);
       setIsLoading(false);
@@ -280,7 +314,7 @@ function App() {
     <div className="App bg-slate-600 h-screen flex flex-col content-center">
       <NavBar />
       <div className="flex justify-center">
-      { isExploding && <ConfettiExplosion {...largeProps}  />}
+        {isExploding && <ConfettiExplosion {...largeProps} />}
       </div>
       <PlaceHolderApp
         lastMinter={lastminter!}

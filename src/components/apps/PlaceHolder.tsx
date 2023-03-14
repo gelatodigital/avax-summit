@@ -78,13 +78,13 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
               <h2 className="text-xl underline-offset-4  text-white">
                 Token's already minted: {props.tokenId} 
                 </h2>
-                <button
+                {/* <button
                     style={{ borderColor: "unset", color: "black" }}
                     className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100"
                     onClick={() => props.mint()}
                   >
                     Mint
-                  </button>
+                  </button> */}
                 {props.ownerOf == "0" ? (
                   <div>
                     <p>You don't have minted a token yet</p>

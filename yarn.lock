@@ -1908,9 +1908,9 @@
   dependencies:
     "@floating-ui/core" "^1.0.5"
 
-"@gelatonetwork/gasless-onboarding@^0.0.2-alpha.3":
+"@gelatonetwork/gasless-onboarding@0.0.2-alpha.3":
   version "0.0.2-alpha.3"
-  resolved "https://registry.npmjs.org/@gelatonetwork/gasless-onboarding/-/gasless-onboarding-0.0.2-alpha.3.tgz"
+  resolved "https://registry.yarnpkg.com/@gelatonetwork/gasless-onboarding/-/gasless-onboarding-0.0.2-alpha.3.tgz#8eb4a0bfc15a2db9e1e021ca1be5e4b764359f5d"
   integrity sha512-UDTzTf1koykVEv/grB/G9b2r9SXk0xbXVyRdJ4JOiCLkz6OnB/ku6ldJRqun3O5+DCCIDEd/aayX8hWy0A/ucw==
   dependencies:
     "@gelatonetwork/gasless-wallet" "^0.0.2-alpha.3"
@@ -1918,9 +1918,9 @@
     "@web3auth/modal" "4.2.3"
 
 "@gelatonetwork/gasless-wallet@^0.0.2-alpha.3":
-  version "0.0.2-alpha.3"
-  resolved "https://registry.npmjs.org/@gelatonetwork/gasless-wallet/-/gasless-wallet-0.0.2-alpha.3.tgz"
-  integrity sha512-dzhUnW0b+wlTAztq5brxymr3ZWJG65BkPVlGflYPvKE6pCjjCXEfhsbMHZJtAuqkT8dYxFSJ3/2Z9LXlzOnQZQ==
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@gelatonetwork/gasless-wallet/-/gasless-wallet-0.0.2.tgz#9bc64d955d872e2dc7ef1969609123486e53f651"
+  integrity sha512-f9PD5/W/10alIUuNFBva099OtAUxnTpaLjzjJZiKDw8Nw2iXzpnPDF7NO9ns+gY9FZIZ7tz6wztHFsswpBZAng==
   dependencies:
     "@gelatonetwork/relay-sdk" "3.1.0"
     "@typechain/ethers-v5" "10.2.0"

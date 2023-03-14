@@ -98,6 +98,7 @@ function App() {
 
   const connectButton = async () => {
     // dispatch(addTask('taskId'));
+    console.log(gelatoLogin)
 
     if (!gelatoLogin) {
       return;

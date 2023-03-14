@@ -1,5 +1,5 @@
 {
-  "name": "create-gelato-gasless-wallet",
+  "name": "eth-dubai",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -24,7 +24,7 @@
     "verify": "npx hardhat etherscan-verify"
   },
   "dependencies": {
-    "@gelatonetwork/gasless-onboarding": "^0.0.2-alpha.3",
+    "@gelatonetwork/gasless-onboarding": "0.0.2-alpha.3",
     "@gelatonetwork/ops-sdk": "^2.2.0-alpha",
     "@gelatonetwork/web3-functions-sdk": "^0.4.3",
     "@nomiclabs/hardhat-ethers": "^2.2.2",
@@ -76,9 +76,11 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",

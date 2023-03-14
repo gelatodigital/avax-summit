@@ -11,7 +11,7 @@
     "contract:test": "cd hardhat && npx hardhat --tsconfig ./tsconfig.hardhat.json test",
     "task": "cd hardhat && npx hardhat --tsconfig ./tsconfig.hardhat.json",
     "start": "react-app-rewired start",
-    "build-react": "react-app-rewired build",
+    "build": "react-app-rewired build",
     "test-react": "react-app-rewired test",
     "eject-react": "react-scripts eject",
     "clean": "yarn hardhat clean && rm -rf dist",

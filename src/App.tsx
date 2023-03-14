@@ -22,7 +22,7 @@ import { Tasks } from "./components/Tasks";
 import { NFT_ABI } from "./constants";
 import ConfettiExplosion from "confetti-explosion-react";
 
-const nftAddres = "0x105246C20C61002C7f26eABFEbE90641D234F995";
+const nftAddres = "0x41c18081ed1bB8B3972336A89979905d949F6b92";
 
 const largeProps = {
   force: 0.6,
@@ -80,6 +80,7 @@ function App() {
   };
 
   const mint = async () => {
+ 
     setIsLoading(true);
     // setExploding(false)
     // setExploding(true)
@@ -93,12 +94,12 @@ function App() {
     // console.log(data)
     console.log(tx);
 
-    setIsLoading(false);
+
   };
 
   const connectButton = async () => {
     // dispatch(addTask('taskId'));
-    console.log(gelatoLogin)
+  
 
     if (!gelatoLogin) {
       return;
@@ -126,7 +127,7 @@ function App() {
 
   const refresh = async (_tokenId: number) => {
     let ipfs = await contract!.tokenURI(_tokenId);
-    console.log(ipfs);
+
 
     let url = ipfs.replace("ipfs://", "");
 
@@ -134,8 +135,7 @@ function App() {
 
     const persons = res.data;
 
-    console.log(persons.name);
-    console.log(persons.image);
+
     setImageName(persons.name);
     setImageUrl(persons.image.replace("ipfs://", ""));
   };
@@ -146,21 +146,17 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    //setConnected(true)
-    console.log(connected);
-  });
 
   useEffect(() => {
     const init = async () => {
-      console.log(80);
+    
       setIsLoading(true);
       try {
         const queryParams = new URLSearchParams(window.location.search);
         const chainIdParam = queryParams.get("chainId");
         const { apiKey, chainId, target, rpcUrl } =
           getChainConfig(chainIdParam);
-        console.log(chainId);
+    
         const smartWalletConfig: GaslessWalletConfig = {
           apiKey: "w6GRnNDpTnmKHo4o9ckQ_m_JDpgZOUyTrNwgz5TemBM_",
         };
@@ -181,15 +177,15 @@ function App() {
           loginConfig,
           smartWalletConfig
         );
-        console.log(104);
+    
         setContractConfig({ chainId, target });
         await gelatoLogin.init();
-        console.log(108);
+
         setGelatoLogin(gelatoLogin);
         const provider = gelatoLogin.getProvider();
-        console.log(provider);
+    
         if (provider) {
-          console.log(110);
+   
           setWeb3AuthProvider(provider);
         }
       } catch (error) {
@@ -204,7 +200,7 @@ function App() {
   useEffect(() => {
     const init = async () => {
       if (!gelatoLogin || !web3AuthProvider) {
-        console.log(121);
+     
         return;
       }
 
@@ -216,10 +212,10 @@ function App() {
         balance: (await signer.getBalance()).toString(),
         chainId: await signer.getChainId(),
       });
-      console.log(wallet);
+   
       const user = await gelatoLogin.getUserInfo();
       setUser(user);
-      console.log(user);
+
       const gelatoSmartWallet = gelatoLogin.getGaslessWallet();
       setSmartWallet(gelatoSmartWallet);
       setIsDeployed(await gelatoSmartWallet.isDeployed());
@@ -230,23 +226,29 @@ function App() {
       );
 
       contract.on("MintEvent", async (_tokenId: any) => {
-        console.log(_tokenId.toString());
+   
         const alreadyOwnerId = (
           await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
         ).toString();
-        console.log(alreadyOwnerId);
+        const currentTokenId = (await contract.tokenIds()).toString();
+        setTokenId(currentTokenId);
         if (alreadyOwnerId == _tokenId.toString()) {
           setAlreadyOwnerId(alreadyOwnerId)
           let ipfs = await contract!.tokenURI(+alreadyOwnerId);
-          console.log(ipfs);
+      
 
           let url = ipfs.replace("ipfs://", "");
 
           let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
 
+          setIsDeployed(await smartWallet!.isDeployed());
+        
+
           const persons = res.data;
           setImageName(persons.name);
           setImageUrl(persons.image.replace("ipfs://", ""));
+
+          setIsLoading(false);
         }
       });
 
@@ -254,12 +256,12 @@ function App() {
         const alreadyOwnerId = (
           await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
         ).toString();
-        console.log(_tokenId);
-        console.log(alreadyOwnerId)
+        const currentTokenId = (await contract.tokenIds()).toString();
+        setTokenId(currentTokenId);
         if (alreadyOwnerId == _tokenId.toString()) {
           setAlreadyOwnerId(alreadyOwnerId)
           let ipfs = await contract!.tokenURI(+alreadyOwnerId);
-          console.log(ipfs);
+    
 
           let url = ipfs.replace("ipfs://", "");
 
@@ -275,20 +277,20 @@ function App() {
       setConnected(true);
 
       const currentTokenId = (await contract.tokenIds()).toString();
-      console.log(currentTokenId);
+      setTokenId(currentTokenId);
 
       const alreadyOwnerId = (
         await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
       ).toString();
-      console.log(alreadyOwnerId);
+   
 
       setAlreadyOwnerId(alreadyOwnerId);
       setTokenId(currentTokenId);
 
       if (alreadyOwnerId != "0") {
-        console.log(alreadyOwnerId != "0");
+      
         let ipfs = await contract.tokenURI(+alreadyOwnerId);
-        console.log(ipfs);
+       
 
         let url = ipfs.replace("ipfs://", "");
 
@@ -296,8 +298,7 @@ function App() {
 
         const persons = res.data;
 
-        console.log(persons.name);
-        console.log(persons.image);
+  
         setImageName(persons.name);
         setImageUrl(persons.image.replace("ipfs://", ""));
       }

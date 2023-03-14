@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UserInfo } from "@web3auth/base";
-import ConfettiExplosion from 'confetti-explosion-react';
+import ConfettiExplosion from "confetti-explosion-react";
 import { Eoa } from "../Eoa";
 import { SmartWallet } from "../SmartWallet";
 import { Tasks } from "../Tasks";
@@ -19,7 +19,7 @@ interface PlaceHolderProps {
   lastMinter: string;
   isLoading: boolean;
   imageUrl: string;
-  imageName:string;
+  imageName: string;
   toggleConnect: () => {};
   mint: () => {};
 }
@@ -29,17 +29,15 @@ const largeProps = {
   duration: 5000,
   particleCount: 200,
   height: 1600,
-  width: 1600
-}
+  width: 1600,
+};
 
 const PlaceHolderApp = (props: PlaceHolderProps) => {
   const tasks = useAppSelector((state) => state.tasks.tasks);
 
   return (
-
     <div>
-         
-      <div className="flex flex-row  justify-content-center align-items-center mt-5 mr-8 ml-8">
+      <div className="flex flex-row  justify-content-center align-items-center mt-2 mr-4 ml-4">
         <div className="card  bg-base-100 grow shadow-xl basis-1/5">
           <div
             style={{ alignItems: "center" }}
@@ -54,29 +52,33 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
             {props.isLoading ? (
               <Loading />
             ) : (
-              <button
-                style={{ borderColor: "unset", color: "black" }}
-                className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100 border-color"
-                onClick={() => props.toggleConnect()}
-              >
-                {" "}
-                {props.connected ? "Sign Out" : "Sign in"}
-              </button>
+              <div>
+                {!props.connected && (
+                  <button
+                    style={{ borderColor: "unset", color: "black" }}
+                    className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100 border-color"
+                    onClick={() => props.toggleConnect()}
+                  >
+                    Sign in
+                  </button>
+                )}
+              </div>
             )}
           </div>
 
           {props.connected ? (
-            <div className="card-body pt-1 flex-col justify-content-center align-items-center">
-              <Eoa user={props.user} wallet={props.wallet} />
-              <SmartWallet
-                address={props.smartWallet?.getAddress()!}
+            <div className="pt-1 flex-col justify-content-center align-items-center">
+              <Eoa user={
+                props.user} 
+                wallet={props.wallet} 
+                smartAddress={props.smartWallet?.getAddress()!}
                 chainId={props.chainId}
-                isDeployed={props.isDeployed}
-              />
+                isDeployed={props.isDeployed}/>
+            
 
               <div className="mb-4 flex-column self-center">
-              <h2 className="text-xl underline-offset-4  text-white">
-                Token's already minted: {props.tokenId} 
+                <h2 className="text-xl underline-offset-4  text-white">
+                  Token's already minted: {props.tokenId}
                 </h2>
                 {/* <button
                     style={{ borderColor: "unset", color: "black" }}
@@ -88,24 +90,59 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                 {props.ownerOf == "0" ? (
                   <div>
                     <p>You don't have minted a token yet</p>
-                  <button
-                    style={{ borderColor: "unset", color: "black" }}
-                    className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100"
-                    onClick={() => props.mint()}
-                  >
-                    Mint
-                  </button>
+                    <button
+                      style={{ borderColor: "unset", color: "black" }}
+                      className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100"
+                      onClick={() => props.mint()}
+                    >
+                      Mint
+                    </button>
                   </div>
                 ) : (
-                <div className="mt-2">
-                  <h3> Your Token : {props.imageName}</h3>
-                  <img
-                    width={250}
-                    height={250}
-                    style={{margin: " 20px auto"}}
-                    src={`https://ipfs.io/ipfs/${props.imageUrl}`}
-                  />
-                </div>)}
+                  <div className="mt-2">
+                    <h3> Your Token : {props.imageName}</h3>
+                    <img
+                      width={250}
+                      height={250}
+                      style={{ margin: " 20px auto" }}
+                      src={`https://ipfs.io/ipfs/${props.imageUrl}`}
+                    />
+                    <div>
+                    <a
+                      href={`https://testnets.opensea.io/collection/gelato-bots-3`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <p className="text-md text-white">
+                       Click to Collection on OpenSea
+                      </p>
+                    </a>
+                    </div>
+                    <div>
+                    <a
+                      href={`https://beta.app.gelato.network/task/0x1c81fdcb57c827bf28d53277dd6dc3ee80f343b4a6e27473be8cacd13905aeff?chainId=80001`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <p className="text-md text-white">
+                      “Check our web3 function Logs & Executions” to see it generating your NFT with OpenAI
+                      </p>
+                    </a>
+                    </div>
+
+                  </div>
+                )}
+              </div>
+              <div>
+                {props.connected && (
+                  <button
+                    style={{ marginBottom:"20px", borderColor: "unset", color: "black" }}
+                    className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100 border-color"
+                    onClick={() => props.toggleConnect()}
+                  >
+                    Sign Out
+                  </button>
+                )}
               </div>
               {tasks.length > 0 && (
                 <div className="flex flex-col pb-14">

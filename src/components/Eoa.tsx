@@ -2,31 +2,47 @@ import { UserInfo } from "@web3auth/base";
 export const Eoa: React.FC<{
   user: Partial<UserInfo> | null;
   wallet: { address: string; chainId: number } | null;
+  smartAddress: string;
+  isDeployed: boolean;
+  chainId: number;
 }> = (props) => {
   const { user, wallet } = props;
-console.log(props)
+
   return (
-    <div className="flex flex-col gap-3  bg-opacity-30 rounded-lg shadow-md pb-4">
+    <div className="flex flex-col  bg-opacity-30 mb-2">
       {user && (
-        <div className="flex flex-column gap-1 justify-center">
-    
+        <div className="flex flex-column justify-center">
           {user.email && (
-            <div className="flex flex-row gap-1">
-              <p className="text-base font-medium">Logged in with</p>
-              <p className="text-base font-bold">{user?.email}</p>
+            <div>
+              <div className="flex flex-row  justify-center">
+                <p className="text-md text-white font-medium">Logged in with:  </p>
+                <p className="text-md text-white font-medium">{user?.email}</p>
+              </div>
+              <div className="flex flex-row justify-center">
+                <p className="text-md  text-white font-medium">
+                  Address: {wallet?.address}, Chain Id: {wallet?.chainId}
+                </p>
+              </div>
             </div>
           )}
         </div>
       )}
-      <div>
-        <div className="flex flex-row gap-1 justify-center">
-          <p className="text-lg font-medium">Address: {wallet?.address}</p>
+            <div className="flex mt-2 flex-row justify-center">
+        <p className="text-md  text-base font-medium">
+          {" "}
+          Smart Wallet Address:   
+        </p>
+        <a
+          href={`https://mumbai.polygonscan.com/address/${props.smartAddress}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <p className="text-md text-base">{props.smartAddress}</p>
+        </a>
+     
        
-        </div>
-        <div className="flex flex-row gap-1 justify-center">
-          <p className="text-lg font-medium">Chain Id: {wallet?.chainId}</p>
-        </div>
       </div>
+      <p className="text-md text-base"> {props.isDeployed ? "is Deployed" : "Not Deployed Yet"}</p>
     </div>
   );
 };

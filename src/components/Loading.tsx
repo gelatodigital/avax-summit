@@ -1,6 +1,7 @@
 export const Loading = () => {
   return (
-    <svg
+    <div className="flex justify-center align-center">
+    <svg 
       aria-hidden="true"
       className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-[#b45f63]"
       viewBox="0 0 100 101"
@@ -16,5 +17,6 @@ export const Loading = () => {
         fill="currentFill"
       />
     </svg>
+    </div>
   );
 };

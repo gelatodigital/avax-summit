@@ -8,8 +8,8 @@ import { Contract, ethers } from "ethers";
 import { addTask } from "./store/slices/taskSlice";
 import { addError } from "./store/slices/errorSlice";
 import PlaceHolderApp from "./components/apps/PlaceHolder";
-import { NFTStorage, File } from "nft.storage";
 import * as dotenv from "dotenv";
+import axios from "axios";
 import {
   GaslessOnboarding,
   GaslessWalletConfig,
@@ -20,9 +20,17 @@ import { SafeEventEmitterProvider, UserInfo } from "@web3auth/base";
 import { getChainConfig } from "./utils";
 import { Tasks } from "./components/Tasks";
 import { NFT_ABI } from "./constants";
-import { current } from "@reduxjs/toolkit";
-import { Web3Storage} from 'web3.storage'
+import ConfettiExplosion from "confetti-explosion-react";
 
+const nftAddres="0x105246C20C61002C7f26eABFEbE90641D234F995"
+
+const largeProps = {
+  force: 0.6,
+  duration: 5000,
+  particleCount: 200,
+  height: 1600,
+  width: 1600
+}
 
 function App() {
   const tasks = useAppSelector((state) => state.tasks.tasks);
@@ -36,9 +44,9 @@ function App() {
     chainId: number;
     target: string;
   }>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [tokenId, setTokenId] = useState<string>("0");
-  const [ownerOf, setAlreadyOwnerId]  = useState<string>("0");
+  const [ownerOf, setAlreadyOwnerId] = useState<string>("0");
   const [lastminter, setLastMinter] = useState<string | null>();
   const [web3AuthProvider, setWeb3AuthProvider] =
     useState<SafeEventEmitterProvider | null>(null);
@@ -58,7 +66,9 @@ function App() {
     chainId: number;
   } | null>(null);
   const [isDeployed, setIsDeployed] = useState<boolean>(false);
-
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageName, setImageName] = useState<string>("");
+  const [isExploding, setExploding] = useState(false);
   let network: "localhost" | "localhost" = "localhost"; // 'mumbai';// "localhost"; //
 
   console.log(115);
@@ -72,23 +82,23 @@ function App() {
   };
 
   const mint = async () => {
-   // setIsLoading(true)
-  // const { data } =  await contract!.mint()
-  const { data } =  await contract!.populateTransaction.mint();
-  let tx = await smartWallet?.sponsorTransaction(
-    "0x62745D2235c932739A6d11078173c487413B2F68",
-    data!
-  )
+    setIsLoading(true);
+   // setExploding(false)
+    // setExploding(true)
 
-  console.log(data)
-   console.log(tx)
-  // let tx = await this.gelatoSmartWallet.sponsorTransaction(
-  //   this.gaslessMinting.address,
-  //   data!
-  // );
-    // let tx = await contract!.mint();
-    // await tx.wait();
-    //setIsLoading(false)
+    // setTimeout(()=> {
+    //   setExploding(false)
+    // },5000)
+    const { data } =  await contract!.populateTransaction.mint();
+    let tx = await smartWallet?.sponsorTransaction(
+      nftAddres,
+      data!
+    )
+
+    // console.log(data)
+      console.log(tx)
+
+    setIsLoading(false)
   };
 
   const connectButton = async () => {
@@ -114,17 +124,11 @@ function App() {
   };
 
   const fetchStatus = async () => {
+ 
     if (!contract || !smartWallet) {
       return;
     }
 
- 
-    const currentTokenId = (await contract.tokenIds()).toString();
-    console.log(currentTokenId)
-
-    // const lastMinter = (await contract.senderWallet)
-    // setTokenId(currentTokenId);
-    //setIsDeployed(await smartWallet!.isDeployed());
   };
 
   useEffect(() => {
@@ -142,7 +146,9 @@ function App() {
         const { apiKey, chainId, target, rpcUrl } =
           getChainConfig(chainIdParam);
         console.log(chainId);
-        const smartWalletConfig: GaslessWalletConfig = { apiKey:"w6GRnNDpTnmKHo4o9ckQ_m_JDpgZOUyTrNwgz5TemBM_" };
+        const smartWalletConfig: GaslessWalletConfig = {
+          apiKey: "w6GRnNDpTnmKHo4o9ckQ_m_JDpgZOUyTrNwgz5TemBM_",
+        };
         const loginConfig: LoginConfig = {
           chain: {
             id: 80001,
@@ -203,39 +209,63 @@ function App() {
       setSmartWallet(gelatoSmartWallet);
       setIsDeployed(await gelatoSmartWallet.isDeployed());
       const contract = new ethers.Contract(
-        "0x62745D2235c932739A6d11078173c487413B2F68",
+        nftAddres,
         NFT_ABI,
         new ethers.providers.Web3Provider(web3AuthProvider!).getSigner()
       );
-   
+
+      contract.on('MintEvent', async (_tokenId:any) => {
+        console.log(_tokenId)
+       console.log('mintied')
+      });
+
+      contract.on('MetadataUpdate', async (_tokenId:any) => {
+       
+       console.log(_tokenId)
+      });
 
       setContract(contract);
       setConnected(true);
 
 
 
-      await fetchStatus();
-      const currentTokenId = (await contract.tokenIds()).toString();
-      const alreadyOwnerId = (await contract.tokenIdByUser(gelatoSmartWallet.getAddress())).toString()
-      console.log(alreadyOwnerId)
-      setAlreadyOwnerId(alreadyOwnerId)
-      setTokenId(currentTokenId);
-      const nftStorageApiKey = "eeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEU3ZjkyOWE2QzZkRDJkQTI5NmUyQmI2NENCNjlBMTIwQzlDNjJEODAiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0OTQzNTI0MjIzNSwibmFtZSI6ImNsaWNrVG9EYW8ifQ.mx1vdaE-4wMbB4NBHTgCc56nhtkw6fmoRTxzu1x26lI";
-      const WEB3_STORAGE_KEY ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDY4NGEzRDUxNGE4ZjgzN0Q3NDkxZTlFZDUwNjJjNzg3YkFlRkQ1NDIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NDk0MzQ5NDY4MzcsIm5hbWUiOiJjbGlja1RvRGFvIn0.E9yLGpgtYb05VSNVgrUeFc5a_BP5uf_2THChjlIf73g";
-
-      const client = new NFTStorage({ token: nftStorageApiKey });
-      const storage = new Web3Storage({ token:WEB3_STORAGE_KEY})
-     // let p = await storage.get('bafyreicwi7sbomz7lu5jozgeghclhptilbvvltpxt3hbpyazz5zxvqh62m/metadata.json')
-      let ss= await storage.get('bafybeicoi6wzyvmo5hbtvuahmoj6oqriys4fkopxcocitlx3s6nnesxwxu/gelato_bot_not_revealed.png')
       
-     // console.log(await p?.json())
+    const currentTokenId = (await contract.tokenIds()).toString();
+    console.log(currentTokenId);
 
+    const alreadyOwnerId = (
+      await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
+    ).toString();
+    console.log(alreadyOwnerId);
+
+  
+
+    setAlreadyOwnerId(alreadyOwnerId);
+    setTokenId(currentTokenId);
+
+    if (alreadyOwnerId != "0") {
+      console.log(alreadyOwnerId != "0")
+      let ipfs = await contract.tokenURI(1);
+      console.log(ipfs)
+  
+      let url = ipfs.replace('ipfs://',"")
+  
+      let res = await axios.get(
+        `https://nftstorage.link/ipfs/${url}`
+      );
+  
+      const persons = res.data;
+
+      console.log(persons.name)
+      console.log(persons.image);
+      setImageName(persons.name)
+      setImageUrl(persons.image.replace('ipfs://',""))
+    }
    
 
-      
-     //let metadata = await client.check('bafyreicwi7sbomz7lu5jozgeghclhptilbvvltpxt3hbpyazz5zxvqh62m/metadata.json')
 
-       // console.log(metadata)
+ 
+
 
       const interval = setInterval(fetchStatus, 5000);
       setIsLoading(false);
@@ -249,6 +279,9 @@ function App() {
   return (
     <div className="App bg-slate-600 h-screen flex flex-col content-center">
       <NavBar />
+      <div className="flex justify-center">
+      { isExploding && <ConfettiExplosion {...largeProps}  />}
+      </div>
       <PlaceHolderApp
         lastMinter={lastminter!}
         tokenId={tokenId}
@@ -259,6 +292,9 @@ function App() {
         isDeployed={isDeployed}
         connected={connected}
         chainId={chainId}
+        imageUrl={imageUrl}
+        imageName={imageName}
+        isLoading={isLoading}
         toggleConnect={toggleConnect}
         mint={mint}
       />

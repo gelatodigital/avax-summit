@@ -5,12 +5,16 @@ import { Eoa } from "../Eoa";
 import { SmartWallet } from "../SmartWallet";
 import { Tasks } from "../Tasks";
 import { useAppSelector } from "../../store/hooks";
+import { GaslessWalletInterface } from "@gelatonetwork/gasless-onboarding";
 interface PlaceHolderProps {
   connected: boolean;
   chainId: number;
   user: Partial<UserInfo> | null;
   wallet: { address: string; chainId: number } | null;
+  smartWallet: GaslessWalletInterface | null;
+  isDeployed:boolean;
   tokenId:string;
+  ownerOf:string;
   lastMinter:string;
   toggleConnect: () => {};
   mint:()=> {}
@@ -18,7 +22,7 @@ interface PlaceHolderProps {
 
 const PlaceHolderApp = (props: PlaceHolderProps) => {
   const tasks = useAppSelector((state) => state.tasks.tasks)
-  console.log(tasks)
+  console.log(props)
   return (
     <div>
       <div className="flex flex-row  justify-content-center align-items-center mt-5 mr-8 ml-8">
@@ -39,17 +43,16 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
             </button>
             </div>
             { props.connected ?  (<div className="card-body pt-1 flex-col justify-content-center align-items-center">
-              <h2 className="card-title">{props.connected}</h2>
              
             <Eoa  user={props.user} wallet={props.wallet} />
             <SmartWallet
-              address={props.wallet?.address!}
+              address={props.smartWallet?.getAddress()!}
               chainId={props.chainId}
-              isDeployed={props.connected}
+              isDeployed={props.isDeployed}
             />
       
           <div className="mb-4  self-center">
-            Token Nr
+            Current Token {props.tokenId}
             <p
               style={{
                 height: "30px",
@@ -59,12 +62,16 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                 margin: "auto",
               }}
             ></p>
+       
+            { props.ownerOf == "0" && (
             <button style={{borderColor:'unset', color:'black'}}
               className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100"
               onClick={() => props.mint()}
             >
               Mint
-            </button>
+            </button>)
+          }
+         <img src="https://ipfs.io/ipfs/QmQqzMTavQgT4f4T5v6PWBp7XNKtoPmC9jvn12WPT3gkSE" />
           </div>
           {tasks.length > 0 && (
         <div className="flex flex-col pb-14">

@@ -4,13 +4,12 @@ export const Eoa: React.FC<{
   wallet: { address: string; chainId: number } | null;
 }> = (props) => {
   const { user, wallet } = props;
+console.log(props)
   return (
     <div className="flex flex-col gap-3  bg-opacity-30 rounded-lg shadow-md pb-4">
       {user && (
-        <div className="flex flex-row gap-1 justify-between">
-          <div>
-            <p className="text-3xl font-bold">EOA</p>
-          </div>
+        <div className="flex flex-column gap-1 justify-center">
+    
           {user.email && (
             <div className="flex flex-row gap-1">
               <p className="text-base font-medium">Logged in with</p>

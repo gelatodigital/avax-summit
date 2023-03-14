@@ -1,4 +1,8 @@
-export const COUNTER_CONTRACT_ABI = [
-  "function increment() external",
-  "function counter() public view returns(uint256)",
+export const NFT_ABI = [
+  "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
+  "function revealNft(uint256 tokenId, string memory tokenURI) external",
+  "function tokenURI(uint256 tokenId) public view returns (string memory) ",
+  "function tokenIds() public view returns(uint256)",
+  "function tokenIdByUser(address) public view returns(uint256)",
+  "function mint() external",
 ];

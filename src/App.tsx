@@ -259,9 +259,9 @@ function App() {
         let ipfs = await contract.tokenURI(+alreadyOwnerId);
         let url = ipfs.replace("ipfs://", "");
         let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
-        const persons = res.data;
-        setImageName(persons.name);
-        setImageUrl(persons.image.replace("ipfs://", ""));
+        const nft = res.data;
+        setImageName(nft.name);
+        setImageUrl(nft.image.replace("ipfs://", ""));
       }
 
 

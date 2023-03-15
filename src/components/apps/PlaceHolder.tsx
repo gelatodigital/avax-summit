@@ -13,14 +13,12 @@ import "react-dropdown-now/style.css";
 
 interface PlaceHolderProps {
   connected: boolean;
-  chainId: number;
   user: Partial<UserInfo> | null;
   wallet: { address: string; chainId: number } | null;
   smartWallet: GaslessWalletInterface | null;
   isDeployed: boolean;
   tokenId: string;
   ownerOf: string;
-  lastMinter: string;
   isLoading: boolean;
   imageUrl: string;
   imageName: string;
@@ -85,15 +83,8 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
 
               <div className="mb-4 flex-column self-center">
                 <h2 className="text-xl underline-offset-4  text-white">
-                  Token's already minted: {props.tokenId}
+                 Total Token's already minted: {props.tokenId}
                 </h2>
-                {/* <button
-                    style={{ borderColor: "unset", color: "black" }}
-                    className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100"
-                    onClick={() => props.mint()}
-                  >
-                    Mint
-                  </button> */}
                 {props.ownerOf == "0" ? (
                   <div>
                     <p>Do you want your NFT by nightime or daylight</p>
@@ -104,7 +95,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                 options={["By Day", "By Night"]}
                 value="By Night"
               
-                onSelect={(value) => props.selectTime(value)} // always fires once a selection happens even if there is no change
+                onSelect={(value) => props.selectTime(value)} 
             
               />
               </div>
@@ -132,12 +123,12 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
 
                     <div>
                       <a
-                        href={`https://opensea.io/collection/eth-dubai-gelato-bots-1`}
+                        href={`https://opensea.io/assets/matic/0xD47c74228038E8542A38e3E7fb1f4a44121eE14E/${props.ownerOf}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <p className="text-md text-white">
-                          Click to Collection on OpenSea
+                        <p  className="text-md text-white">
+                         <span style={{color:'#f5c3a6',}}  className="underline" >Click here </span> to Collection on OpenSea
                         </p>
                       </a>
                     </div>
@@ -148,8 +139,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                         rel="noopener noreferrer"
                       >
                         <p className="text-md text-white">
-                          “Check our web3 function Logs & Executions” to see it
-                          generating your NFT with OpenAI
+                          Check our web3 function Logs & Executions by    <span style={{color:'#f5c3a6',}}  className="underline " >clicking here </span> 
                         </p>
                       </a>
                     </div>

@@ -15,34 +15,41 @@ export const Eoa: React.FC<{
           {user.email && (
             <div>
               <div className="flex flex-row  justify-center">
-                <p className="text-md text-white font-medium">Logged in with:  </p>
-                <p className="text-md text-white font-medium">{user?.email}</p>
-              </div>
-              <div className="flex flex-row justify-center">
-                <p className="text-md  text-white font-medium">
-                  Address: {wallet?.address}, Chain Id: {wallet?.chainId}
+                <p className="text-md mt-1 text-white font-medium">
+                  Logged in with:{" "}
+                </p>
+                <p className="text-md mt-1 text-white font-medium">
+                  {user?.email}
                 </p>
               </div>
             </div>
           )}
         </div>
       )}
-            <div className="flex mt-2 flex-row justify-center">
-        <p className="text-md  text-base font-medium">
-          {" "}
-          Smart Wallet Address:   
+
+      <div className="flex mt-2 flex-col justify-center">
+        <p className="text-md mb-1 text-base  font-medium">
+          <span className="text-white"> Wallet: </span> {wallet?.address}
         </p>
-        <a
-          href={`https://polygonscan.com/address/${props.smartAddress}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <p className="text-md text-base">{props.smartAddress}</p>
-        </a>
-     
-       
+        <p className="text-md  text-base font-medium">
+          <span className="text-white">Smart Wallet: </span>
+          <a
+            href={`https://polygonscan.com/address/${props.smartAddress}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {" "}
+            <span style={{ color: "#f5c3a6" }} className="underline ">
+              {" "}
+              {props.smartAddress}
+            </span>
+          </a>
+        </p>
       </div>
-      <p className="text-md text-base"> {props.isDeployed ? "is Deployed" : "Not Deployed Yet"}</p>
+      <p className="text-md text-base">
+        {" "}
+        {props.isDeployed ? "is Deployed" : "Not Deployed Yet"}
+      </p>
     </div>
   );
 };

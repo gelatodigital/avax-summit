@@ -99,7 +99,7 @@ function App() {
     setWeb3AuthProvider(web3authProvider);
   };
 
-  //// Login
+  //// Logout
   const logout = async () => {
     if (!gelatoLogin) {
       return;
@@ -117,7 +117,7 @@ function App() {
     setConnected(false);
   };
 
-  /// Initial Use Effect will always run
+  /// Initial Use Effect will always run and prepare the gasless Wallet
   useEffect(() => {
     const init = async () => {
       setIsLoading(true);
@@ -182,13 +182,17 @@ function App() {
 
       const gelatoSmartWallet = gelatoLogin.getGaslessWallet();
       setSmartWallet(gelatoSmartWallet);
+
       setIsDeployed(await gelatoSmartWallet.isDeployed());
+
+      /// Instantiate the contract
       const contract = new ethers.Contract(
         nftAddres,
         NFT_ABI,
         new ethers.providers.Web3Provider(web3AuthProvider!).getSigner()
       );
-
+      
+      /// UI update when mint event is fired (we check if the minted token is ours)
       contract.on("MintEvent", async (_tokenId: any) => {
         const alreadyOwnerId = (
           await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
@@ -219,6 +223,7 @@ function App() {
         }
       });
 
+      /// UI update when metadata update event is  fired (we check if the minted token is ours)
       contract.on("MetadataUpdate", async (_tokenId: any) => {
         const alreadyOwnerId = (
           await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
@@ -249,7 +254,6 @@ function App() {
       ).toString();
 
       setAlreadyOwnerId(alreadyOwnerId);
-   
 
       if (alreadyOwnerId != "0") {
         let ipfs = await contract.tokenURI(+alreadyOwnerId);

@@ -1,14 +1,12 @@
-import { useState } from "react";
+
 import { UserInfo } from "@web3auth/base";
-import ConfettiExplosion from "confetti-explosion-react";
 import { Eoa } from "../Eoa";
-import { SmartWallet } from "../SmartWallet";
 import { Tasks } from "../Tasks";
 import { useAppSelector } from "../../store/hooks";
 import { GaslessWalletInterface } from "@gelatonetwork/gasless-onboarding";
 import { Loading } from "../Loading";
 
-import { Dropdown, Selection } from "react-dropdown-now";
+import { Dropdown } from "react-dropdown-now";
 import "react-dropdown-now/style.css";
 
 interface PlaceHolderProps {

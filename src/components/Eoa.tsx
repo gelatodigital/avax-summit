@@ -33,7 +33,7 @@ export const Eoa: React.FC<{
           Smart Wallet Address:   
         </p>
         <a
-          href={`https://mumbai.polygonscan.com/address/${props.smartAddress}`}
+          href={`https://polygonscan.com/address/${props.smartAddress}`}
           target="_blank"
           rel="noopener noreferrer"
         >

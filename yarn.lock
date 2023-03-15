@@ -6213,7 +6213,7 @@ classic-level@^1.2.0:
     napi-macros "~2.0.0"
     node-gyp-build "^4.3.0"
 
-classnames@^2.3.2:
+classnames@^2.3.1, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.3.2.tgz"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
@@ -12648,6 +12648,14 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-dropdown-now@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/react-dropdown-now/-/react-dropdown-now-6.0.1.tgz#11f9bff4517bfa309d0895430d77cc80e1e1e013"
+  integrity sha512-i70+dSk33E61KsDN5hYUDHX81tgGipcA7MzCbzi+tKOQBc6sjwW8NnTEZEWXjolfmpy/kB/9e8aBqUgx8JVnLQ==
+  dependencies:
+    classnames "^2.3.1"
+    lodash "^4.17.21"
 
 react-error-overlay@^6.0.11:
   version "6.0.11"

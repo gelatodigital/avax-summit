@@ -22,7 +22,7 @@ import { Tasks } from "./components/Tasks";
 import { NFT_ABI } from "./constants";
 import ConfettiExplosion from "confetti-explosion-react";
 
-const nftAddres = "0x8Ba4F4e109F24c4Fbc871A0A5795DaDebF14565b";
+const nftAddres = "0xD47c74228038E8542A38e3E7fb1f4a44121eE14E"//"0x8Ba4F4e109F24c4Fbc871A0A5795DaDebF14565b";
 
 const largeProps = {
   force: 0.6,
@@ -68,6 +68,7 @@ function App() {
   const [isDeployed, setIsDeployed] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
+  const [nftTime, setNftTime] = useState<string>("By Night");
   const [isExploding, setExploding] = useState(false);
   let network: "localhost" | "localhost" = "localhost"; // 'mumbai';// "localhost"; //
 
@@ -79,27 +80,28 @@ function App() {
     }
   };
 
-  const mint = async () => {
- 
-    setIsLoading(true);
-    // setExploding(false)
-    // setExploding(true)
+  const selectTime = async (value: any) => {
+  
+    setNftTime(value.value);
+  };
 
-    // setTimeout(()=> {
-    //   setExploding(false)
-    // },5000)
-    const { data } = await contract!.populateTransaction.mint();
+  const mint = async () => {
+    setIsLoading(true);
+
+  
+
+    const nftTimeFlag = nftTime == 'By Day' ? false : true;
+
+  
+
+    const { data } = await contract!.populateTransaction.mint(nftTimeFlag);
     let tx = await smartWallet?.sponsorTransaction(nftAddres, data!);
 
-    // console.log(data)
     console.log(tx);
-
-
   };
 
   const connectButton = async () => {
     // dispatch(addTask('taskId'));
-  
 
     if (!gelatoLogin) {
       return;
@@ -128,13 +130,11 @@ function App() {
   const refresh = async (_tokenId: number) => {
     let ipfs = await contract!.tokenURI(_tokenId);
 
-
     let url = ipfs.replace("ipfs://", "");
 
     let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
 
     const persons = res.data;
-
 
     setImageName(persons.name);
     setImageUrl(persons.image.replace("ipfs://", ""));
@@ -146,25 +146,22 @@ function App() {
     }
   };
 
-
   useEffect(() => {
     const init = async () => {
-    
       setIsLoading(true);
       try {
         const queryParams = new URLSearchParams(window.location.search);
         const chainIdParam = queryParams.get("chainId");
         const { apiKey, chainId, target, rpcUrl } =
           getChainConfig(chainIdParam);
-    
+
         const smartWalletConfig: GaslessWalletConfig = {
-          apiKey: "w6GRnNDpTnmKHo4o9ckQ_m_JDpgZOUyTrNwgz5TemBM_",
+          apiKey: "SPONSOR_KEY"
         };
         const loginConfig: LoginConfig = {
           chain: {
-            id: 80001,
-            rpcUrl:
-              "https://polygon-mumbai.g.alchemy.com/v2/P2lEQkjFdNjdN0M_mpZKB8r3fAa2M0vT",
+            id: 137,
+            rpcUrl: "RPC"
           },
           ui: {
             theme: "dark",
@@ -177,15 +174,14 @@ function App() {
           loginConfig,
           smartWalletConfig
         );
-    
+
         setContractConfig({ chainId, target });
         await gelatoLogin.init();
 
         setGelatoLogin(gelatoLogin);
         const provider = gelatoLogin.getProvider();
-    
+
         if (provider) {
-   
           setWeb3AuthProvider(provider);
         }
       } catch (error) {
@@ -200,7 +196,6 @@ function App() {
   useEffect(() => {
     const init = async () => {
       if (!gelatoLogin || !web3AuthProvider) {
-     
         return;
       }
 
@@ -212,7 +207,7 @@ function App() {
         balance: (await signer.getBalance()).toString(),
         chainId: await signer.getChainId(),
       });
-   
+
       const user = await gelatoLogin.getUserInfo();
       setUser(user);
 
@@ -226,29 +221,32 @@ function App() {
       );
 
       contract.on("MintEvent", async (_tokenId: any) => {
-   
         const alreadyOwnerId = (
           await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
         ).toString();
         const currentTokenId = (await contract.tokenIds()).toString();
         setTokenId(currentTokenId);
         if (alreadyOwnerId == _tokenId.toString()) {
-          setAlreadyOwnerId(alreadyOwnerId)
+          setAlreadyOwnerId(alreadyOwnerId);
           let ipfs = await contract!.tokenURI(+alreadyOwnerId);
-      
 
           let url = ipfs.replace("ipfs://", "");
 
           let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
 
-          setIsDeployed(await smartWallet!.isDeployed());
-        
+          setIsDeployed(await gelatoSmartWallet!.isDeployed());
 
           const persons = res.data;
           setImageName(persons.name);
           setImageUrl(persons.image.replace("ipfs://", ""));
 
           setIsLoading(false);
+          setExploding(false);
+          setExploding(true);
+
+          setTimeout(() => {
+            setExploding(false);
+          }, 5000);
         }
       });
 
@@ -259,9 +257,8 @@ function App() {
         const currentTokenId = (await contract.tokenIds()).toString();
         setTokenId(currentTokenId);
         if (alreadyOwnerId == _tokenId.toString()) {
-          setAlreadyOwnerId(alreadyOwnerId)
+          setAlreadyOwnerId(alreadyOwnerId);
           let ipfs = await contract!.tokenURI(+alreadyOwnerId);
-    
 
           let url = ipfs.replace("ipfs://", "");
 
@@ -282,15 +279,12 @@ function App() {
       const alreadyOwnerId = (
         await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
       ).toString();
-   
 
       setAlreadyOwnerId(alreadyOwnerId);
       setTokenId(currentTokenId);
 
       if (alreadyOwnerId != "0") {
-      
         let ipfs = await contract.tokenURI(+alreadyOwnerId);
-       
 
         let url = ipfs.replace("ipfs://", "");
 
@@ -298,7 +292,6 @@ function App() {
 
         const persons = res.data;
 
-  
         setImageName(persons.name);
         setImageUrl(persons.image.replace("ipfs://", ""));
       }
@@ -310,7 +303,7 @@ function App() {
     init();
   }, [web3AuthProvider]);
 
-  useTitle("create-gelato-gasless-walelt-dapp");
+  useTitle("Gelato ETH Dubai Gasless Minting");
 
   return (
     <div className="App bg-slate-600 h-screen flex flex-col content-center">
@@ -333,6 +326,7 @@ function App() {
         isLoading={isLoading}
         toggleConnect={toggleConnect}
         mint={mint}
+        selectTime={selectTime}
       />
     </div>
   );

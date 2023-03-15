@@ -7,6 +7,10 @@ import { Tasks } from "../Tasks";
 import { useAppSelector } from "../../store/hooks";
 import { GaslessWalletInterface } from "@gelatonetwork/gasless-onboarding";
 import { Loading } from "../Loading";
+
+import { Dropdown, Selection } from "react-dropdown-now";
+import "react-dropdown-now/style.css";
+
 interface PlaceHolderProps {
   connected: boolean;
   chainId: number;
@@ -22,6 +26,7 @@ interface PlaceHolderProps {
   imageName: string;
   toggleConnect: () => {};
   mint: () => {};
+  selectTime: (val:any) => {}
 }
 
 const largeProps = {
@@ -46,8 +51,10 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
             <div className="flex flex-col justify-content-center align-items-center">
               <h2 className="text-2xl underline underline-offset-4 font-semibold text-white">
                 {" "}
-                Gelato Wallet Gasless Minting
+                Gelato ETH Dubai Gasless Minting
               </h2>
+
+              
             </div>
             {props.isLoading ? (
               <Loading />
@@ -68,13 +75,13 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
 
           {props.connected ? (
             <div className="pt-1 flex-col justify-content-center align-items-center">
-              <Eoa user={
-                props.user} 
-                wallet={props.wallet} 
+              <Eoa
+                user={props.user}
+                wallet={props.wallet}
                 smartAddress={props.smartWallet?.getAddress()!}
                 chainId={props.chainId}
-                isDeployed={props.isDeployed}/>
-            
+                isDeployed={props.isDeployed}
+              />
 
               <div className="mb-4 flex-column self-center">
                 <h2 className="text-xl underline-offset-4  text-white">
@@ -89,9 +96,20 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                   </button> */}
                 {props.ownerOf == "0" ? (
                   <div>
-                    <p>You don't have minted a token yet</p>
+                    <p>Do you want your NFT by nightime or daylight</p>
+
+                    <div style={{width:'200px', margin:'25px auto 10px'}}>
+              <Dropdown 
+                placeholder="Select an option"
+                options={["By Day", "By Night"]}
+                value="By Night"
+              
+                onSelect={(value) => props.selectTime(value)} // always fires once a selection happens even if there is no change
+            
+              />
+              </div>
                     <button
-                      style={{ borderColor: "unset", color: "black" }}
+                      style={{ borderColor: "unset", color: "black", width:'200px' }}
                       className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100"
                       onClick={() => props.mint()}
                     >
@@ -101,43 +119,53 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                 ) : (
                   <div className="mt-2">
                     <h3> Your Token : {props.imageName}</h3>
-                    <img
-                      width={250}
-                      height={250}
-                      style={{ margin: " 20px auto" }}
-                      src={`https://ipfs.io/ipfs/${props.imageUrl}`}
-                    />
-                    <div>
-                    <a
-                      href={`https://testnets.opensea.io/collection/gelato-bots-3`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <p className="text-md text-white">
-                       Click to Collection on OpenSea
-                      </p>
-                    </a>
-                    </div>
-                    <div>
-                    <a
-                      href={`https://beta.app.gelato.network/task/0x1c81fdcb57c827bf28d53277dd6dc3ee80f343b4a6e27473be8cacd13905aeff?chainId=80001`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <p className="text-md text-white">
-                      “Check our web3 function Logs & Executions” to see it generating your NFT with OpenAI
-                      </p>
-                    </a>
-                    </div>
+                    {props.imageUrl == "" ? (
+                      <p></p>
+                    ) : (
+                      <img
+                        width={250}
+                        height={250}
+                        style={{ margin: " 20px auto" }}
+                        src={`https://ipfs.io/ipfs/${props.imageUrl}`}
+                      />
+                    )}
 
+                    <div>
+                      <a
+                        href={`https://opensea.io/collection/eth-dubai-gelato-bots-1`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <p className="text-md text-white">
+                          Click to Collection on OpenSea
+                        </p>
+                      </a>
+                    </div>
+                    <div>
+                      <a
+                        href={`https://beta.app.gelato.network/task/0xce305033e53322a7e32f58b429ce0ff9a8c314b2163851dd12a75e5a4ed1e85e?chainId=137`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <p className="text-md text-white">
+                          “Check our web3 function Logs & Executions” to see it
+                          generating your NFT with OpenAI
+                        </p>
+                      </a>
+                    </div>
                   </div>
                 )}
               </div>
               <div>
                 {props.connected && (
                   <button
-                    style={{ marginBottom:"20px", borderColor: "unset", color: "black" }}
-                    className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100 border-color"
+                    style={{
+                      marginBottom: "20px",
+                      borderColor: "unset",
+                      color: "black",
+                      background: 'grey'
+                    }}
+                    className="btn btn-primary mt-4  border-neutral-100 border-color"
                     onClick={() => props.toggleConnect()}
                   >
                     Sign Out

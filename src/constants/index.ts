@@ -4,7 +4,7 @@ export const NFT_ABI = [
   "function tokenURI(uint256 tokenId) public view returns (string memory) ",
   "function tokenIds() public view returns(uint256)",
   "function tokenIdByUser(address) public view returns(uint256)",
-  "function mint() external",
+  "function mint(bool _isNight) external",
   "event MintEvent(uint256 _tokenId)",
   "event MetadataUpdate(uint256 _tokenId)",
 ];

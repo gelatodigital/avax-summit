@@ -22,7 +22,7 @@ import { Tasks } from "./components/Tasks";
 import { NFT_ABI } from "./constants";
 import ConfettiExplosion from "confetti-explosion-react";
 
-const nftAddres = "0x41c18081ed1bB8B3972336A89979905d949F6b92";
+const nftAddres = "0x8Ba4F4e109F24c4Fbc871A0A5795DaDebF14565b";
 
 const largeProps = {
   force: 0.6,

@@ -22,6 +22,7 @@ import { Tasks } from "./components/Tasks";
 import { NFT_ABI } from "./constants";
 import ConfettiExplosion from "confetti-explosion-react";
 
+
 const nftAddres = "0xD47c74228038E8542A38e3E7fb1f4a44121eE14E"
 
 const largeProps = {
@@ -41,6 +42,8 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [tokenId, setTokenId] = useState<string>("0");
   const [ownerOf, setAlreadyOwnerId] = useState<string>("0");
+  const [captCha, setCaptcha] = useState<boolean | null>(null);
+  const [isEoaOwner, setIsEoaOwner] = useState<boolean>(false);
   const [web3AuthProvider, setWeb3AuthProvider] =
     useState<SafeEventEmitterProvider | null>(null);
   const [smartWallet, setSmartWallet] = useState<GaslessWalletInterface | null>(
@@ -67,13 +70,36 @@ function App() {
     if (connected == true) {
       logout();
     } else {
+      if(captCha == true) {
+
       connectButton();
+      }
     }
   };
 
   const selectTime = async (value: any) => {
 
     setNftTime(value.value);
+  };
+
+
+ const captcha = async (token:string) => {
+
+ setCaptcha(true)
+
+ }
+
+  const transfer = async () => {
+    setIsLoading(true);
+    const nftTimeFlag = nftTime == 'By Day' ? false : true;
+
+    console.log(+ownerOf)
+
+    const smartAd= smartWallet?.getAddress()
+
+    const { data } = await contract!.populateTransaction.transferFrom(smartAd, wallet?.address,+ownerOf);
+    let tx = await smartWallet?.sponsorTransaction(nftAddres, data!);
+    console.log(`https://relay.gelato.digital/tasks/status/${tx?.taskId}`);
   };
 
   const mint = async () => {
@@ -124,12 +150,12 @@ function App() {
       try {
       
         const smartWalletConfig: GaslessWalletConfig = {
-          apiKey: "YOUR KEY"
+          apiKey: ""
         };
         const loginConfig: LoginConfig = {
           chain: {
             id: 137,
-            rpcUrl: "RPC", 
+            rpcUrl: "https://polygon-rpc.com", 
           },
           ui: {
             theme: "dark",
@@ -159,7 +185,7 @@ function App() {
       }
     };
     init();
-  }, []);
+  }, [captCha]);
 
   /// Use effect will run when web3AuthProvider is set, this happens only when the user logs in after redirect or already logged
   useEffect(() => {
@@ -192,6 +218,8 @@ function App() {
         new ethers.providers.Web3Provider(web3AuthProvider!).getSigner()
       );
       
+
+
       /// UI update when mint event is fired (we check if the minted token is ours)
       contract.on("MintEvent", async (_tokenId: any) => {
         const alreadyOwnerId = (
@@ -238,16 +266,18 @@ function App() {
 
           let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
 
-          const persons = res.data;
-          setImageName(persons.name);
-          setImageUrl(persons.image.replace("ipfs://", ""));
+          const nft = res.data;
+          setImageName(nft.name.replace("Eth Dubai","EthDubai"));
+          setImageUrl(nft.image.replace("ipfs://", ""));
         }
       });
 
       setConnected(true);
+      setContract(contract);
 
       const currentTokenId = (await contract.tokenIds()).toString();
       setTokenId(currentTokenId);
+
 
       const alreadyOwnerId = (
         await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
@@ -255,12 +285,17 @@ function App() {
 
       setAlreadyOwnerId(alreadyOwnerId);
 
+
+      const currentOwner = await contract.ownerOf(+alreadyOwnerId);
+      console.log(currentOwner)
+
+
       if (alreadyOwnerId != "0") {
         let ipfs = await contract.tokenURI(+alreadyOwnerId);
         let url = ipfs.replace("ipfs://", "");
         let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
         const nft = res.data;
-        setImageName(nft.name);
+        setImageName(nft.name.replace("Eth Dubai","EthDubai"));
         setImageUrl(nft.image.replace("ipfs://", ""));
       }
 
@@ -278,6 +313,7 @@ function App() {
       <div className="flex justify-center">
         {isExploding && <ConfettiExplosion {...largeProps} />}
       </div>
+
       <PlaceHolderApp
         tokenId={tokenId}
         ownerOf={ownerOf}
@@ -291,6 +327,7 @@ function App() {
         isLoading={isLoading}
         toggleConnect={toggleConnect}
         mint={mint}
+        captcha={captcha}
         selectTime={selectTime}
       />
     </div>

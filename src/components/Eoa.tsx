@@ -4,7 +4,6 @@ export const Eoa: React.FC<{
   wallet: { address: string; chainId: number } | null;
   smartAddress: string;
   isDeployed: boolean;
-  chainId: number;
 }> = (props) => {
   const { user, wallet } = props;
 
@@ -29,7 +28,18 @@ export const Eoa: React.FC<{
 
       <div className="flex mt-2 flex-col justify-center">
         <p className="text-md mb-1 text-base  font-medium">
-          <span className="text-white"> Wallet: </span> {wallet?.address}
+          <span className="text-white"> Wallet: </span> 
+          <a
+            href={`https://polygonscan.com/address/${wallet?.address}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {" "}
+            <span style={{ color: "#f5c3a6" }} className="underline ">
+              {" "}
+              {wallet?.address.substring(0,6)}....{wallet?.address.substring(wallet?.address.length-6)}
+            </span>
+          </a>
         </p>
         <p className="text-md  text-base font-medium">
           <span className="text-white">Smart Wallet: </span>
@@ -41,7 +51,7 @@ export const Eoa: React.FC<{
             {" "}
             <span style={{ color: "#f5c3a6" }} className="underline ">
               {" "}
-              {props.smartAddress}
+              {props.smartAddress.substring(0,6)}....{props.smartAddress.substring(props.smartAddress.length-6)}
             </span>
           </a>
         </p>

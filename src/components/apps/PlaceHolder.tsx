@@ -1,11 +1,10 @@
-
 import { UserInfo } from "@web3auth/base";
 import { Eoa } from "../Eoa";
 import { Tasks } from "../Tasks";
 import { useAppSelector } from "../../store/hooks";
 import { GaslessWalletInterface } from "@gelatonetwork/gasless-onboarding";
 import { Loading } from "../Loading";
-
+import ReCAPTCHA from "react-google-recaptcha";
 import { Dropdown } from "react-dropdown-now";
 import "react-dropdown-now/style.css";
 
@@ -22,7 +21,8 @@ interface PlaceHolderProps {
   imageName: string;
   toggleConnect: () => {};
   mint: () => {};
-  selectTime: (val:any) => {}
+  captcha: (token: any) => {};
+  selectTime: (val: any) => {};
 }
 
 const largeProps = {
@@ -47,23 +47,29 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
             <div className="flex flex-col justify-content-center align-items-center">
               <h2 className="text-2xl underline underline-offset-4 font-semibold text-white">
                 {" "}
-                Gelato ETH Dubai Gasless Minting
+                Gelato EthDubai Gasless Minting
               </h2>
-
-              
             </div>
             {props.isLoading ? (
               <Loading />
             ) : (
               <div>
                 {!props.connected && (
-                  <button
-                    style={{ borderColor: "unset", color: "black" }}
-                    className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100 border-color"
-                    onClick={() => props.toggleConnect()}
-                  >
-                    Sign in
-                  </button>
+                  <div>
+                    <div className="App">
+                      <ReCAPTCHA
+                        sitekey="6LdnyQslAAAAAIeyqe6cAATmUSgWDqPBqNGiQE9I"
+                        onChange={(token) => props.captcha(token)}
+                      />
+                    </div>
+                    <button
+                      style={{ borderColor: "unset", color: "black" }}
+                      className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100 border-color"
+                      onClick={() => props.toggleConnect()}
+                    >
+                      Sign in
+                    </button>
+                  </div>
                 )}
               </div>
             )}
@@ -75,35 +81,38 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                 user={props.user}
                 wallet={props.wallet}
                 smartAddress={props.smartWallet?.getAddress()!}
-                chainId={props.chainId}
                 isDeployed={props.isDeployed}
               />
 
               <div className="mb-4 flex-column self-center">
                 <h2 className="text-xl underline-offset-4  text-white">
-                 Total Token's already minted: {props.tokenId}
+                  Total NFTs minted: {props.tokenId}
                 </h2>
                 {props.ownerOf == "0" ? (
                   <div>
                     <p>Do you want your NFT by nightime or daylight</p>
 
-                    <div style={{width:'200px', margin:'25px auto 10px'}}>
-              <Dropdown 
-                placeholder="Select an option"
-                options={["By Day", "By Night"]}
-                value="By Night"
-              
-                onSelect={(value) => props.selectTime(value)} 
-            
-              />
-              </div>
-                    <button
-                      style={{ borderColor: "unset", color: "black", width:'200px' }}
+                    <div style={{ width: "200px", margin: "25px auto 10px" }}>
+                      <Dropdown
+                        placeholder="Select an option"
+                        options={["By Day", "By Night"]}
+                        value="By Night"
+                        onSelect={(value) => props.selectTime(value)}
+                      />
+                    </div>
+
+                    {/* <button
+                      style={{
+                        borderColor: "unset",
+                        color: "black",
+                        width: "200px",
+                      }}
                       className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100"
                       onClick={() => props.mint()}
                     >
                       Mint
-                    </button>
+                    </button> */}
+                    <p>Minting Period Finished</p>
                   </div>
                 ) : (
                   <div className="mt-2">
@@ -118,26 +127,39 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                         src={`https://ipfs.io/ipfs/${props.imageUrl}`}
                       />
                     )}
-
+                    <div></div>
                     <div>
                       <a
                         href={`https://opensea.io/assets/matic/0xD47c74228038E8542A38e3E7fb1f4a44121eE14E/${props.ownerOf}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <p  className="text-md text-white">
-                         <span style={{color:'#f5c3a6',}}  className="underline" >Click here </span> to Collection on OpenSea
+                        <p className="text-md text-white">
+                          <span
+                            style={{ color: "#f5c3a6", marginRight: "5px" }}
+                            className="underline"
+                          >
+                            View
+                          </span>{" "}
+                          your NFT on OpenSea
                         </p>
                       </a>
                     </div>
                     <div>
                       <a
-                        href={`https://beta.app.gelato.network/task/0xce305033e53322a7e32f58b429ce0ff9a8c314b2163851dd12a75e5a4ed1e85e?chainId=137`}
+                        href={`https://beta.app.gelato.network/task/0x0ac1d185cefa75b0852ca52973630be6c2d4f49abf6585f18862ccc384c65a62?chainId=137`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         <p className="text-md text-white">
-                          Check our web3 function Logs & Executions by    <span style={{color:'#f5c3a6',}}  className="underline " >clicking here </span> 
+                          <span
+                            style={{ color: "#f5c3a6", marginRight: "5px" }}
+                            className="underline "
+                          >
+                            {" "}
+                            Explore
+                          </span>{" "}
+                          this Web3 Function
                         </p>
                       </a>
                     </div>
@@ -151,7 +173,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                       marginBottom: "20px",
                       borderColor: "unset",
                       color: "black",
-                      background: 'grey'
+                      background: "grey",
                     }}
                     className="btn btn-primary mt-4  border-neutral-100 border-color"
                     onClick={() => props.toggleConnect()}

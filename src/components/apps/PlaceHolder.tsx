@@ -147,7 +147,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                     </div>
                     <div>
                       <a
-                        href={`https://beta.app.gelato.network/task/0x0ac1d185cefa75b0852ca52973630be6c2d4f49abf6585f18862ccc384c65a62?chainId=137`}
+                        href={`https://beta.app.gelato.network/task/0xdb547dd8a4c09e5f63af4c996cf90eb331fc643b364b4e4e22b516263c818a3f?chainId=137`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

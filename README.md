@@ -1,55 +1,20 @@
-# Gelato Gasless Wallet Demo App using Hardhat & React
+# ETH Dubai React Frontend
 
-This demo should help devs create web3 apps implementing Gelato Gasless Wallet rapidly, providing a hardhat instance, a basic react UI and the required infrastructure to get up and running.
+This demo contains the frontend associated with the openAI NFT generated NFT
+The app is deployed at:[https://eth-dubai-nft.web.app/](https://eth-dubai-nft.web.app/)
 
-This repo consists of a hardhat folder with a contract called GelatoWalletNft.sol as well as a minimal frontend written in React.
+The contract is deplpoyed on polygon at [https://polygonscan.com/address/0xd47c74228038e8542a38e3e7fb1f4a44121ee14e](https://polygonscan.com/address/0xd47c74228038e8542a38e3e7fb1f4a44121ee14e)
 
-The contract is a ERC721 contract with the public method mint.
-
-The contract is deployeed on mumbai [here](https://mumbai.polygonscan.com/address/0x67c982310a687e43ba2a659b1117f6c5b73bb662) 
+The Web3 Fucntion can be looked at [w3f](https://beta.app.gelato.network/task/0xdb547dd8a4c09e5f63af4c996cf90eb331fc643b364b4e4e22b516263c818a3f?chainId=137)
 
 
-The demo app is line under: [https://web3-functions-demo.gelato.network/](https://web3-functions-demo.gelato.network/)
-
+The NFT contract and Web3 Function implementation can be foun at this [repo](https://github.com/gelatodigital/eth-dubai-w3f)
 
 &nbsp;
 
 # 🏄‍♂️ Dev Quick Start
 
 
-Add the env keys required
-
 ```bash
-RPC=YOUR_PROVIDER_URL
-PK=YOUR PRIVATE KEY
-MUMBAI_API_KEY=YOUR ETHERSCAN/POLYGON KEY
-```
-
-Change the values in .env-example file and rename it to .env
-&nbsp;
-
-## Contract Deployment
-
-
-### 1) : We compile our contract
-
-```javascript
-npm run compile
-```
-
-### 2) : We deploy our contract
-
-```javascript
-npm run contract:deploy
-```
-
-
-## React Frontend
-In a separate temrminal run following command
-
-### Known Issues
-When using web3Auth there are some known isses with Webpack 5, if you start your project from zero, please follow this [guide](https://web3auth.io/docs/troubleshooting/webpack-issues) to create the required polyfills
-
-```javascript
 npm run start
 ```

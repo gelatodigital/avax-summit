@@ -1,1 +1,0 @@
-export const  ipfsHash = "QmTaPomYU283cRS9JQ8KXYLAXFPzb9XvcjXqHhkwmfnwyX";

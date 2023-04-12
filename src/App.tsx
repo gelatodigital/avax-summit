@@ -23,7 +23,7 @@ import { NFT_ABI } from "./constants";
 import ConfettiExplosion from "confetti-explosion-react";
 
 
-const nftAddres = "0xD47c74228038E8542A38e3E7fb1f4a44121eE14E"
+const nftAddres = "0x5041c60C75633F29DEb2AED79cB0A9ed79202415"
 
 const largeProps = {
   force: 0.6,
@@ -43,7 +43,6 @@ function App() {
   const [tokenId, setTokenId] = useState<string>("0");
   const [ownerOf, setAlreadyOwnerId] = useState<string>("0");
   const [captCha, setCaptcha] = useState<boolean | null>(null);
-  const [isEoaOwner, setIsEoaOwner] = useState<boolean>(false);
   const [web3AuthProvider, setWeb3AuthProvider] =
     useState<SafeEventEmitterProvider | null>(null);
   const [smartWallet, setSmartWallet] = useState<GaslessWalletInterface | null>(
@@ -70,10 +69,10 @@ function App() {
     if (connected == true) {
       logout();
     } else {
-      if(captCha == true) {
+     // if(captCha == true) {
 
       connectButton();
-      }
+      //}
     }
   };
 
@@ -93,7 +92,7 @@ function App() {
     setIsLoading(true);
     const nftTimeFlag = nftTime == 'By Day' ? false : true;
 
-    console.log(+ownerOf)
+
 
     const smartAd= smartWallet?.getAddress()
 
@@ -148,10 +147,13 @@ function App() {
     const init = async () => {
       setIsLoading(true);
       try {
-      
+
+
         const smartWalletConfig: GaslessWalletConfig = {
           apiKey: ""
         };
+    
+
         const loginConfig: LoginConfig = {
           chain: {
             id: 137,
@@ -169,11 +171,13 @@ function App() {
           smartWalletConfig
         );
 
-      
+
         await gelatoLogin.init();
 
         setGelatoLogin(gelatoLogin);
         const provider = gelatoLogin.getProvider();
+
+     
 
         if (provider) {
           setWeb3AuthProvider(provider);
@@ -185,8 +189,9 @@ function App() {
       }
     };
     init();
-  }, [captCha]);
+  }, []);
 
+   // captCha
   /// Use effect will run when web3AuthProvider is set, this happens only when the user logs in after redirect or already logged
   useEffect(() => {
     const init = async () => {
@@ -211,6 +216,7 @@ function App() {
 
       setIsDeployed(await gelatoSmartWallet.isDeployed());
 
+    
       /// Instantiate the contract
       const contract = new ethers.Contract(
         nftAddres,
@@ -267,7 +273,7 @@ function App() {
           let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
 
           const nft = res.data;
-          setImageName(nft.name.replace("Eth Dubai","EthDubai"));
+          setImageName(nft.name.replace("Eth Zurich","EthZurich"));
           setImageUrl(nft.image.replace("ipfs://", ""));
         }
       });
@@ -275,7 +281,11 @@ function App() {
       setConnected(true);
       setContract(contract);
 
+  
+
       const currentTokenId = (await contract.tokenIds()).toString();
+    
+   
       setTokenId(currentTokenId);
 
 
@@ -286,17 +296,16 @@ function App() {
       setAlreadyOwnerId(alreadyOwnerId);
 
 
-      const currentOwner = await contract.ownerOf(+alreadyOwnerId);
-      console.log(currentOwner)
-
-
       if (alreadyOwnerId != "0") {
+        const currentOwner = await contract.ownerOf(+alreadyOwnerId);
         let ipfs = await contract.tokenURI(+alreadyOwnerId);
         let url = ipfs.replace("ipfs://", "");
         let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
         const nft = res.data;
-        setImageName(nft.name.replace("Eth Dubai","EthDubai"));
+        setImageName(nft.name.replace("Eth Zurich","EthZurich"));
         setImageUrl(nft.image.replace("ipfs://", ""));
+      } else {
+
       }
 
 
@@ -305,7 +314,7 @@ function App() {
     init();
   }, [web3AuthProvider]);
 
-  useTitle("Gelato ETH Dubai Gasless Minting");
+  useTitle("Gelato ETH Zurich Gasless Minting");
 
   return (
     <div className="App bg-slate-600 h-screen flex flex-col content-center">

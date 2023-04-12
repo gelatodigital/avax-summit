@@ -47,7 +47,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
             <div className="flex flex-col justify-content-center align-items-center">
               <h2 className="text-2xl underline underline-offset-4 font-semibold text-white">
                 {" "}
-                Gelato EthDubai Gasless Minting
+                Gelato EthZurich Gasless Minting
               </h2>
             </div>
             {props.isLoading ? (
@@ -56,12 +56,12 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
               <div>
                 {!props.connected && (
                   <div>
-                    <div className="App">
+                    {/* <div className="App">
                       <ReCAPTCHA
-                        sitekey="6LdnyQslAAAAAIeyqe6cAATmUSgWDqPBqNGiQE9I"
+                        sitekey="6LcX0X4lAAAAAFVXjal2000EVuT57VdQCnqU1jbH"
                         onChange={(token) => props.captcha(token)}
                       />
-                    </div>
+                    </div> */}
                     <button
                       style={{ borderColor: "unset", color: "black" }}
                       className="btn btn-primary mt-4 bg-gradient-to-r from-[#b45f63] to-[#f5c3a6] border-neutral-100 border-color"
@@ -101,7 +101,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                       />
                     </div>
 
-                    {/* <button
+                    { <button
                       style={{
                         borderColor: "unset",
                         color: "black",
@@ -111,8 +111,8 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                       onClick={() => props.mint()}
                     >
                       Mint
-                    </button> */}
-                    <p>Minting Period Finished</p>
+                    </button> }
+                    {/* <p>Minting Period Finished</p> */}
                   </div>
                 ) : (
                   <div className="mt-2">
@@ -130,7 +130,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                     <div></div>
                     <div>
                       <a
-                        href={`https://opensea.io/assets/matic/0xD47c74228038E8542A38e3E7fb1f4a44121eE14E/${props.ownerOf}`}
+                        href={`https://opensea.io/assets/matic/0x5041c60c75633f29deb2aed79cb0a9ed79202415/${props.ownerOf}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -147,7 +147,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                     </div>
                     <div>
                       <a
-                        href={`https://beta.app.gelato.network/task/0xdb547dd8a4c09e5f63af4c996cf90eb331fc643b364b4e4e22b516263c818a3f?chainId=137`}
+                        href={`https://beta.app.gelato.network/task/0x6e9ee6b129c9f58dd46c77808c9451c18bc80b9bd1ef87313e8c37ae22639cbb?chainId=137`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

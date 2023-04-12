@@ -8,7 +8,7 @@ The contract is deplpoyed on polygon at [https://polygonscan.com/address/0x5041c
 The Web3 Fucntion can be looked at [w3f](https://beta.app.gelato.network/task/0x6e9ee6b129c9f58dd46c77808c9451c18bc80b9bd1ef87313e8c37ae22639cbb?chainId=137)
 
 
-The NFT contract and Web3 Function implementation can be foun at this [repo](https://github.com/gelatodigital/eth-dubai-w3f)
+The NFT contract and Web3 Function implementation can be foun at this [repo](https://github.com/gelatodigital/eth-zurich-w3f)
 
 &nbsp;
 

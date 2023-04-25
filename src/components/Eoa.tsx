@@ -30,7 +30,7 @@ export const Eoa: React.FC<{
         <p className="text-md mb-1 text-base  font-medium">
           <span className="text-white"> Wallet: </span> 
           <a
-            href={`https://polygonscan.com/address/${wallet?.address}`}
+            href={`https://snowtrace.io/address/${wallet?.address}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -44,7 +44,7 @@ export const Eoa: React.FC<{
         <p className="text-md  text-base font-medium">
           <span className="text-white">Smart Wallet: </span>
           <a
-            href={`https://polygonscan.com/address/${props.smartAddress}`}
+            href={`https://snowtrace.io/address/${props.smartAddress}`}
             target="_blank"
             rel="noopener noreferrer"
           >

@@ -22,8 +22,7 @@ import { Tasks } from "./components/Tasks";
 import { NFT_ABI } from "./constants";
 import ConfettiExplosion from "confetti-explosion-react";
 
-
-const nftAddres = "0x5041c60C75633F29DEb2AED79cB0A9ed79202415"
+const nftAddres = "0x5B91C8E7a2DEABC623E6Ab34E8c26F27Cc18bC66";
 
 const largeProps = {
   force: 0.6,
@@ -50,8 +49,6 @@ function App() {
   );
   const [connected, setConnected] = useState(false);
 
- 
-
   const [contract, setContract] = useState<Contract | null>(null);
   const [user, setUser] = useState<Partial<UserInfo> | null>(null);
   const [wallet, setWallet] = useState<{
@@ -64,12 +61,12 @@ function App() {
   const [imageName, setImageName] = useState<string>("");
   const [nftTime, setNftTime] = useState<string>("By Night");
   const [isExploding, setExploding] = useState(false);
-  
+
   const toggleConnect = async () => {
     if (connected == true) {
       logout();
     } else {
-     // if(captCha == true) {
+      // if(captCha == true) {
 
       connectButton();
       //}
@@ -77,33 +74,31 @@ function App() {
   };
 
   const selectTime = async (value: any) => {
-
     setNftTime(value.value);
   };
 
-
- const captcha = async (token:string) => {
-
- setCaptcha(true)
-
- }
+  const captcha = async (token: string) => {
+    setCaptcha(true);
+  };
 
   const transfer = async () => {
     setIsLoading(true);
-    const nftTimeFlag = nftTime == 'By Day' ? false : true;
+    const nftTimeFlag = nftTime == "By Day" ? false : true;
 
+    const smartAd = smartWallet?.getAddress();
 
-
-    const smartAd= smartWallet?.getAddress()
-
-    const { data } = await contract!.populateTransaction.transferFrom(smartAd, wallet?.address,+ownerOf);
+    const { data } = await contract!.populateTransaction.transferFrom(
+      smartAd,
+      wallet?.address,
+      +ownerOf
+    );
     let tx = await smartWallet?.sponsorTransaction(nftAddres, data!);
     console.log(`https://relay.gelato.digital/tasks/status/${tx?.taskId}`);
   };
 
   const mint = async () => {
     setIsLoading(true);
-    const nftTimeFlag = nftTime == 'By Day' ? false : true;
+    const nftTimeFlag = nftTime == "By Day" ? false : true;
 
     const { data } = await contract!.populateTransaction.mint(nftTimeFlag);
     let tx = await smartWallet?.sponsorTransaction(nftAddres, data!);
@@ -114,8 +109,7 @@ function App() {
   const connectButton = async () => {
     // dispatch(addTask('taskId'));
 
-
-console.log(gelatoLogin)
+    console.log(gelatoLogin);
 
     if (!gelatoLogin) {
       return;
@@ -147,19 +141,15 @@ console.log(gelatoLogin)
     const init = async () => {
       setIsLoading(true);
       try {
-
-
         const smartWalletConfig: GaslessWalletConfig = {
-          apiKey: ""
+          apiKey: "",
         };
-    
 
         const loginConfig: LoginConfig = {
           chain: {
-            id: 137,
-            rpcUrl: "https://polygon-rpc.com", 
+            id: 43114,
+            rpcUrl: "https://avalanche-mainnet.infura.io/v3/1e43f3d31eea4244bf25ed4c13bfde0e",
           },
-          domains:[window.location.origin],
           ui: {
             theme: "dark",
           },
@@ -171,16 +161,15 @@ console.log(gelatoLogin)
           loginConfig,
           smartWalletConfig
         );
-        
-        console.log('try to init')
+
+        console.log("try to init");
 
         await gelatoLogin.init();
 
-        console.log('initialized')
+        console.log("initialized");
 
         setGelatoLogin(gelatoLogin);
         const provider = gelatoLogin.getProvider();
-
 
         if (provider) {
           setWeb3AuthProvider(provider);
@@ -194,7 +183,7 @@ console.log(gelatoLogin)
     init();
   }, []);
 
-   // captCha
+  // captCha
   /// Use effect will run when web3AuthProvider is set, this happens only when the user logs in after redirect or already logged
   useEffect(() => {
     const init = async () => {
@@ -219,15 +208,12 @@ console.log(gelatoLogin)
 
       setIsDeployed(await gelatoSmartWallet.isDeployed());
 
-    
       /// Instantiate the contract
       const contract = new ethers.Contract(
         nftAddres,
         NFT_ABI,
         new ethers.providers.Web3Provider(web3AuthProvider!).getSigner()
       );
-      
-
 
       /// UI update when mint event is fired (we check if the minted token is ours)
       contract.on("MintEvent", async (_tokenId: any) => {
@@ -276,7 +262,7 @@ console.log(gelatoLogin)
           let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
 
           const nft = res.data;
-          setImageName(nft.name.replace("Eth Zurich","EthZurich"));
+          setImageName(nft.name.replace("AVAX Summit", "AVAXsummit"));
           setImageUrl(nft.image.replace("ipfs://", ""));
         }
       });
@@ -284,13 +270,9 @@ console.log(gelatoLogin)
       setConnected(true);
       setContract(contract);
 
-  
-
       const currentTokenId = (await contract.tokenIds()).toString();
-    
-   
-      setTokenId(currentTokenId);
 
+      setTokenId(currentTokenId);
 
       const alreadyOwnerId = (
         await contract.tokenIdByUser(gelatoSmartWallet.getAddress())
@@ -298,26 +280,23 @@ console.log(gelatoLogin)
 
       setAlreadyOwnerId(alreadyOwnerId);
 
-
       if (alreadyOwnerId != "0") {
         const currentOwner = await contract.ownerOf(+alreadyOwnerId);
         let ipfs = await contract.tokenURI(+alreadyOwnerId);
         let url = ipfs.replace("ipfs://", "");
         let res = await axios.get(`https://nftstorage.link/ipfs/${url}`);
         const nft = res.data;
-        setImageName(nft.name.replace("Eth Zurich","EthZurich"));
+        setImageName(nft.name.replace("AVAX Summit", "AVAXsummit"));
         setImageUrl(nft.image.replace("ipfs://", ""));
       } else {
-
       }
-
 
       setIsLoading(false);
     };
     init();
   }, [web3AuthProvider]);
 
-  useTitle("Gelato ETH Zurich Gasless Minting");
+  useTitle("Gelato AVAX Summit Gasless Minting");
 
   return (
     <div className="App bg-slate-600 h-screen flex flex-col content-center">

@@ -1,1 +1,0 @@
-(self.webpackChunketh_zurich=self.webpackChunketh_zurich||[]).push([[291,992],{7420:()=>{},95856:()=>{},4361:()=>{},64673:()=>{},78848:()=>{}}]);

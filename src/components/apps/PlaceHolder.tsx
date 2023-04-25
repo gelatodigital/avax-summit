@@ -47,7 +47,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
             <div className="flex flex-col justify-content-center align-items-center">
               <h2 className="text-2xl underline underline-offset-4 font-semibold text-white">
                 {" "}
-                Gelato EthZurich Gasless Minting
+                Gelato AVAX Summit Gasless Minting
               </h2>
             </div>
             {props.isLoading ? (
@@ -130,7 +130,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                     <div></div>
                     <div>
                       <a
-                        href={`https://opensea.io/assets/matic/0x5041c60c75633f29deb2aed79cb0a9ed79202415/${props.ownerOf}`}
+                        href={`https://opensea.io/assets/avalanche/0x5b91c8e7a2deabc623e6ab34e8c26f27cc18bc66/${props.ownerOf}`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -147,7 +147,7 @@ const PlaceHolderApp = (props: PlaceHolderProps) => {
                     </div>
                     <div>
                       <a
-                        href={`https://beta.app.gelato.network/task/0x6e9ee6b129c9f58dd46c77808c9451c18bc80b9bd1ef87313e8c37ae22639cbb?chainId=137`}
+                        href={`https://beta.app.gelato.network/task/0xf73655ea3f8a96f5b2b472e5b6b735dee5f1db06ef5bb5177c1be09fe7522f43?chainId=43114`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

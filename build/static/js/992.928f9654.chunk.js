@@ -1,0 +1,1 @@
+(self.webpackChunkavax_minting=self.webpackChunkavax_minting||[]).push([[992],{7420:()=>{},95856:()=>{},78848:()=>{}}]);

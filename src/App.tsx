@@ -115,7 +115,7 @@ function App() {
     // dispatch(addTask('taskId'));
 
 
-
+console.log(gelatoLogin)
 
     if (!gelatoLogin) {
       return;
@@ -159,6 +159,7 @@ function App() {
             id: 137,
             rpcUrl: "https://polygon-rpc.com", 
           },
+          domains:[window.location.origin],
           ui: {
             theme: "dark",
           },
@@ -170,14 +171,16 @@ function App() {
           loginConfig,
           smartWalletConfig
         );
-
+        
+        console.log('try to init')
 
         await gelatoLogin.init();
+
+        console.log('initialized')
 
         setGelatoLogin(gelatoLogin);
         const provider = gelatoLogin.getProvider();
 
-     
 
         if (provider) {
           setWeb3AuthProvider(provider);

@@ -17,7 +17,7 @@
     "verify": "npx hardhat etherscan-verify"
   },
   "dependencies": {
-    "@gelatonetwork/gasless-onboarding": "0.0.2-alpha.3",
+    "@gelatonetwork/gasless-onboarding": "0.0.2",
     "@gelatonetwork/ops-sdk": "^2.2.0-alpha",
     "@gelatonetwork/web3-functions-sdk": "^0.4.3",
     "@reduxjs/toolkit": "^1.9.3",

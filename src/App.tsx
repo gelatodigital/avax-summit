@@ -81,20 +81,6 @@ function App() {
     setCaptcha(true);
   };
 
-  const transfer = async () => {
-    setIsLoading(true);
-    const nftTimeFlag = nftTime == "By Day" ? false : true;
-
-    const smartAd = smartWallet?.getAddress();
-
-    const { data } = await contract!.populateTransaction.transferFrom(
-      smartAd,
-      wallet?.address,
-      +ownerOf
-    );
-    let tx = await smartWallet?.sponsorTransaction(nftAddres, data!);
-    console.log(`https://relay.gelato.digital/tasks/status/${tx?.taskId}`);
-  };
 
   const mint = async () => {
     setIsLoading(true);
@@ -142,13 +128,13 @@ function App() {
       setIsLoading(true);
       try {
         const smartWalletConfig: GaslessWalletConfig = {
-          apiKey: "",
+          apiKey: process.env.SPONSOR_KEY!,
         };
 
         const loginConfig: LoginConfig = {
           chain: {
             id: 43114,
-            rpcUrl: "https://avalanche-mainnet.infura.io/v3/1e43f3d31eea4244bf25ed4c13bfde0e",
+            rpcUrl: process.env.MAINNET_RPC!,
           },
           ui: {
             theme: "dark",
